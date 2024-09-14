@@ -1,0 +1,321 @@
+{
+  "keys": {
+    "q": {
+      "n": {"verb-comment": "Comment <obj>"},
+      "v": {"": ""},
+      "obj": {"a-comment": "a comment"},
+      "go": {"a-comment": "to a comment"}
+          },
+    "Q": {
+            "n": {"do-comment-line": "Comment a line"},
+      "v": {"": ""},
+      "obj": {"comment-block": "a comment block"},
+      "go": {"comment-block": "to a comment block"}
+          },
+    "w": {
+            "n": {"do-undo": "Undo"},
+      "v": {"": ""},
+      "obj": {"a-word": "a word"},
+      "go": {"a-word": "to a word"}
+          },
+    "W": {
+            "n": {"do-redo": "Redo"},
+      "v": {"": ""},
+      "obj": {"a-WORD": "a WORD"},
+      "go": {"a-word": "to a WORD"}
+          },
+    "f": {
+            "n": {"mo-up": "Go Up"},
+      "v": {"mo-up": "Go Up"},
+      "obj": {"a-function": "a function"},
+      "go": {"a-function": "to a function"}
+          },
+    "F": {
+            "n": {"": ""},
+      "v": {"": ""},
+      "obj": {"a-function-call": "a function call"},
+      "go": {"a-function-call": "to a function call"}
+          },
+    "p": {
+            "n": {"": ""},
+      "v": {"": ""},
+      "obj": {"a-paragraph": "a paragraph"},
+      "go": {"a-paragraph": "to a paragraph"}
+          },
+    "P": {
+            "n": {"": ""},
+      "v": {"": ""},
+      "obj": {"": ""},
+      "go": {"": ""}
+          },
+    "g": {
+            "n": {"do-g-prefix": "G-prefix <c>"},
+      "v": {"do-g-prefix": "G-prefix <c>"},
+      "obj": {"do-g-prefix": "G-prefix <c>"},
+      "go": {"": ""}
+          },
+    "G": {
+            "n": {"": ""},
+      "v": {"": ""},
+      "obj": {"": ""},
+      "go": {"": ""}
+          },
+    "j": {
+            "n": {"do-record-macro": "Record macro <c>"},
+      "v": {"": ""},
+      "obj": {"": ""},
+      "go": {"": ""}
+          },
+    "J": {
+            "n": {"do-play-macro": "Replay macro <c>"},
+      "v": {"": ""},
+      "obj": {"": ""},
+      "go": {"": ""}
+          },
+    "l": {
+            "n": {"mo-find-char": "Find→ <c>"},
+      "v": {"mo-find-char": "Find→ <c>"},
+      "obj": {"op-prev-start": ".. previous start of .."},
+      "go": {"op-prev-start": ".. previous start of .."}
+          },
+    "L": {
+            "n": {"mo-rfind-char": "Find← <c>"},
+      "v": {"mo-rfind-char": "Find← <c>"},
+      "obj": {"op-prev-end": ".. previous end of .."},
+      "go": {"op-prev-end": ".. previous end of .."}
+          },
+    "u": {
+            "n": {"mo-ultra-find": "Find→ <str>"},
+      "v": {"mo-ultra-find": "Find→ <str>"},
+      "obj": {"": ""},
+      "go": {"": ""}
+          },
+    "U": {
+            "n": {"mo-ultra-rfind": "Find← <str>"},
+      "v": {"mo-ultra-rfind": "Find← <str>"},
+      "obj": {"": ""},
+      "go": {"": ""}
+          },
+    "y": {
+            "n": {"do-append": "Append after cursor"},
+      "v": {"op-around": ".. around .."},
+      "obj": {"op-around": ".. around .."},
+      "go": {"": ""}
+          },
+    "Y": {
+            "n": {"do-append-eol": "Append after line"},
+      "v": {"": ""},
+      "obj": {"": ""},
+      "go": {"": ""}
+          },
+    ";": {
+            "n": {"do-repeat-last-cmd": "Repeat last cmd"},
+      "v": {"do-repeat-last-cmd": "Repeat last cmd"},
+      "obj": {"": ""},
+      "go": {"": ""}
+          },
+    "a": {
+            "n": {"verb-select": "Select"},
+      "v": {"": ""},
+      "obj": {"": ""},
+      "go": {"": ""}
+          },
+    "A": {
+            "n": {"a-select-line": "Select line"},
+      "v": {"": ""},
+      "obj": {"": ""},
+      "go": {"": ""}
+          },
+    "r": {
+            "n": {"mo-left": "Go Left"},
+      "v": {"mo-left": "Go Left"},
+      "obj": {"a-loop": "a loop (repeat/for/while)"},
+      "go": {"a-loop": "to a loop (repeat/for/while)"}
+          },
+    "R": {
+            "n": {"mo-screen-top": "Go to Screen Top"},
+      "v": {"mo-screen-top": "Go to Screen Top"},
+      "obj": {"": ""},
+      "go": {"": ""}
+          },
+    "s": {
+            "n": {"mo-down": "Go Down"},
+      "v": {"op-surround": ".. surrounding .."},
+      "obj": {"op-surround": ".. surrounding .."},
+      "go": {"mo-matching-char": "Matching ()[]{}"}
+          },
+    "S": {
+            "n": {"": ""},
+      "v": {"": ""},
+      "obj": {"": ""},
+      "go": {"": ""}
+          },
+    "t": {
+            "n": {"mo-right": "Go Right"},
+      "v": {"mo-right": "Go Right"},
+      "obj": {"a-type": "a type"},
+      "go": {"a-type": "a type"}
+          },
+    "T": {
+            "n": {"mo-screen-bottom": "Go to Screen bottom"},
+      "v": {"mo-screen-bottom": "Go to Screen bottom"},
+      "obj": {"": ""},
+      "go": {"": ""}
+          },
+    "d": {
+            "n": {"verb-delete": "Delete <obj>"},
+      "v": {"verb-delete": "Delete <obj>"},
+      "obj": {"": ""},
+      "go": {"": ""}
+          },
+    "D": {
+            "n": {"do-delete-eol": "Delete until EOL"},
+      "v": {"": ""},
+      "obj": {"": ""},
+      "go": {"": ""}
+          },
+    "h": {
+            "n": {"": ""},
+      "v": {"": ""},
+      "obj": {"": ""},
+      "go": {"": ""}
+          },
+    "H": {
+            "n": {"": ""},
+      "v": {"": ""},
+      "obj": {"": ""},
+      "go": {"": ""}
+          },
+    "n": {
+            "n": {"verb-change": "Change <obj>"},
+      "v": {"verb-change": "Change <obj>"},
+      "obj": {"op-next": ".. next .."},
+      "go": {"op-next": ".. next .."}
+          },
+    "N": {
+            "n": {"do-change-eol": "Change until EOL"},
+      "v": {"": ""},
+      "obj": {"": ""},
+      "go": {"": ""}
+          },
+    "e": {
+            "n": {"verb-go-next": "Go→ to <obj>"},
+      "v": {"verb-go": "Go→  to <obj>"},
+      "obj": {"": ""},
+      "go": {"": ""}
+          },
+    "E": {
+            "n": {"verb-go-prev": "Go← to <obj>"},
+      "v": {"verb-go-prev": "Go← to <obj>"},
+      "obj": {"": ""},
+      "go": {"": ""}
+          },
+    "i": {
+            "n": {"do-insert": "Insert before cursor"},
+      "v": {"op-inner": ".. inner .."},
+      "obj": {"op-inner": ".. inner .."},
+      "go": {"": ""}
+          },
+    "I": {
+            "n": {"do-insert-bol": "Insert before line"},
+      "v": {"": ""},
+      "obj": {"": ""},
+      "go": {"": ""}
+          },
+    "z": {
+            "n": {"do-z-prefix": "Z-prefix <c>"},
+      "v": {"do-z-prefix": "Z-prefix <c>"},
+      "obj": {"do-z-prefix": "Z-prefix <c>"},
+      "go": {"": ""}
+          },
+    "Z": {
+            "n": {"": ""},
+      "v": {"": ""},
+      "obj": {"": ""},
+      "go": {"": ""}
+          },
+    "x": {
+            "n": {"verb-cut": "Cut <obj>"},
+      "v": {"verb-cut": "Cut <obj>"},
+      "obj": {"": ""},
+      "go": {"": ""}
+          },
+    "X": {
+            "n": {"do-cut-eol": "Cut until EOL"},
+      "v": {"": ""},
+      "obj": {"": ""},
+      "go": {"": ""}
+          },
+    "c": {
+            "n": {"verb-copy": "Copy <obj>"},
+      "v": {"verb-copy": "Copy <obj>"},
+      "obj": {"a-condition": "a condition (if/else)"},
+      "go": {"a-condition": "to a condition (if/else)"}
+          },
+    "C": {
+            "n": {"do-copy-eol": "Copy until EOL"},
+      "v": {"": ""},
+      "obj": {"": ""},
+      "go": {"": ""}
+          },
+  "v": {
+    "n": {"do-paste": "Paste ->"},
+    "v": {"": ""},
+    "obj": {"a-variable": "a variable"},
+    "go": {"a-variable": "to a variable"}
+  },
+  "V": {
+    "n": {"do-paste-before": "Paste <-"},
+    "v": {"": ""},
+    "obj": {"": ""},
+    "go": {"": ""}
+  },
+  "b": {
+    "n": {"do-delete-char": "Delete char"},
+    "v": {"": ""},
+    "obj": {"a-block": "a block"},
+    "go": {"a-block": "to a block"}
+  },
+  "B": {
+    "n": {"do-replace-mode": "Replace mode"},
+    "v": {"": ""},
+    "obj": {"": ""},
+    "go": {"": ""}
+  },
+  "k": {
+    "n": {"": ""},
+    "v": {"": ""},
+    "obj": {"": ""},
+    "go": {"": ""}
+  },
+  "K": {
+    "n": {"": ""},
+    "v": {"": ""},
+    "obj": {"": ""},
+    "go": {"": ""}
+  },
+  "m": {
+    "n": {"do-set-mark": "Set mark <c>"},
+    "v": {"do-set-mark": "Set mark <c>"},
+    "obj": {"": ""},
+    "go": {"m-jump-to-mark": "Jump to mark <c>"}
+  },
+  "M": {
+    "n": {"": ""},
+    "v": {"": ""},
+    "obj": {"": ""},
+    "go": {"": ""}
+  },
+  ",": {
+    "n": {"m-repeat-rfind": "Repeat find<-"},
+    "v": {"m-repeat-rfind": "Repeat find<-"},
+    "obj": {"": ""},
+    "go": {"": ""}
+  },
+  ".": {
+    "n": {"m-repeat-find": "Repeat find->"},
+    "v": {"m-repeat-find": "Repeat find->"},
+    "obj": {"": ""},
+    "go": {"": ""}
+  },
+}

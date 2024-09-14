@@ -1,289 +1,322 @@
 -- configuration for plugins included with LazyVim
 -- https://www.lazyvim.org/configuration/plugins#%EF%B8%8F-customizing-plugin-specs
 
+-- local Mappings = require("my-config.keymaps")
+-- local m = Mappings.get
+-- local k = function(c)
+--  return Mappings.keys(c)
+-- end
+-- local letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+-- for letter in string.gmatch(letters, ".") do
+--     _G[letter] = Mappings.keys(letter)
+-- end
 
 
-local Mappings = require('my-config.keymaps')
-local m = Mappings.get
+local Keys = require("my-config.keys")
+local flash = function (n)
+  return Keys.get_key('flash', n)
+end
+local function k (str)
+  return str
+end
+
+
+
+
+-- vim.notify(vim.inspect(flash('f')))
 
 -- use:
 -- keys = {...} to add new keys
 -- keys = function() ... to overwrite all keys
 
 return {
-{
+  {
     "nvim-treesitter/nvim-treesitter",
     keys = {
-        { "gss", desc = "Increment Selection", mode = {"x", "n"}},
-        { "gsr", desc = "Decrement Selection", mode = "x" },
+      { "gss", desc = "Increment Selection", mode = { "x", "n" } },
+      { "gsr", desc = "Decrement Selection", mode = "x" },
     },
     opts = {
-        incremental_selection = {
+      incremental_selection = {
         enable = true,
         keymaps = {
-            init_selection = "gss",
-            node_incremental = "gsn",
-            scope_incremental = "gss",
-            node_decremental = "gsr",
+          init_selection = "gss",
+          node_incremental = "gsn",
+          scope_incremental = "gss",
+          node_decremental = "gsr",
         },
-        },
-        textobjects = {
+      },
+      textobjects = {
         move = {
-            enable = true,
-            goto_next_start = { ["]f"] = "@function.outer", ["]c"] = "@class.outer", ["]a"] = "@parameter.inner" },
-            goto_next_end = { ["]F"] = "@function.outer", ["]C"] = "@class.outer", ["]A"] = "@parameter.inner" },
-            goto_previous_start = { ["[f"] = "@function.outer", ["[c"] = "@class.outer", ["[a"] = "@parameter.inner" },
-            goto_previous_end = { ["[F"] = "@function.outer", ["[C"] = "@class.outer", ["[A"] = "@parameter.inner" },
+          enable = true,
+          goto_next_start = { ["]f"] = "@function.outer", ["]c"] = "@class.outer", ["]a"] = "@parameter.inner" },
+          goto_next_end = { ["]F"] = "@function.outer", ["]C"] = "@class.outer", ["]A"] = "@parameter.inner" },
+          goto_previous_start = { ["[f"] = "@function.outer", ["[c"] = "@class.outer", ["[a"] = "@parameter.inner" },
+          goto_previous_end = { ["[F"] = "@function.outer", ["[C"] = "@class.outer", ["[A"] = "@parameter.inner" },
         },
-        },
+      },
     },
-},
-{
-  "nvim-neo-tree/neo-tree.nvim",
-	keys = {
-    -- { "<leader>fe", function() require("neo-tree.command").execute({ toggle = true, dir = LazyVim.root() }) end, desc = "Explorer NeoTree (Root Dir)", },
-    -- { "<leader>fE", function() require("neo-tree.command").execute({ toggle = true, dir = vim.uv.cwd() }) end, desc = "Explorer NeoTree (cwd)", },
-    -- { "<leader>e", "<leader>fe", desc = "Explorer NeoTree (Root Dir)", remap = true },
-    -- { "<leader>E", "<leader>fE", desc = "Explorer NeoTree (cwd)", remap = true },
-    -- { "<leader>ge", function() require("neo-tree.command").execute({ source = "git_status", toggle = true }) end, desc = "Git Explorer", },
-    -- { "<leader>be", function() require("neo-tree.command").execute({ source = "buffers", toggle = true }) end, desc = "Buffer Explorer", },
   },
-  ---@param opts cmp.ConfigSchema
-  opts = function(_, opts)
-    opts.window = opts.window or {}
-    opts.window.mappings = { -- see https://github.com/MunifTanjim/nui.nvim/tree/main/lua/nui/popup for
-      ["r"] = "noop", -- left
-      ["s"] = "noop", -- down
-      ["f"] = "noop", -- up
-      ["t"] = "focus_preview", -- right
 
-      -- ["<LeftRelease>"] = "open",
-      ["i"] = "open",
-      ["h"] = "close_node",
-      ["<space>"] = "none",
-      ["Y"] = {
-          function(state)
+  ---------------------------------------------------------------------------------------
+  ---------------------------------------------------------------------------------------
+  ----------------------------------- NEOTREE -------------------------------------------
+  ---------------------------------------------------------------------------------------
+  ---------------------------------------------------------------------------------------
+
+  {
+    "nvim-neo-tree/neo-tree.nvim",
+    keys = {
+      -- { "<leader>fe", function() require("neo-tree.command").execute({ toggle = true, dir = LazyVim.root() }) end, desc = "Explorer NeoTree (Root Dir)", },
+      -- { "<leader>fE", function() require("neo-tree.command").execute({ toggle = true, dir = vim.uv.cwd() }) end, desc = "Explorer NeoTree (cwd)", },
+      -- { "<leader>e", "<leader>fe", desc = "Explorer NeoTree (Root Dir)", remap = true },
+      -- { "<leader>E", "<leader>fE", desc = "Explorer NeoTree (cwd)", remap = true },
+      -- { "<leader>ge", function() require("neo-tree.command").execute({ source = "git_status", toggle = true }) end, desc = "Git Explorer", },
+      -- { "<leader>be", function() require("neo-tree.command").execute({ source = "buffers", toggle = true }) end, desc = "Buffer Explorer", },
+    },
+    opts = {
+      -- see `:h neo-tree-custom-commands-global`
+      use_default_mappings = false,
+      commands = {
+        copy_path_to_clipboard = function(state)
           local node = state.tree:get_node()
-          local path = node:get_id()
+          local path = node.path
           vim.fn.setreg("+", path, "c")
-          end,
-          desc = "Copy Path to Clipboard",
-      },
-      ["O"] = {
-          function(state)
+        end,
+        open_with_system_application = function(state)
           require("lazy.util").open(state.tree:get_node().path, { system = true })
-          end,
-          desc = "Open with System Application",
-      },
-      ["P"] = { "toggle_preview", config = { use_float = false } },
-      ["<space>"] = {
-        "toggle_node",
-        nowait = false, -- disable `nowait` if you have existing combos starting with this char that you want to use
-      },
-      ["<2-LeftMouse>"] = "open",
-      ["<cr>"] = "open",
-      -- ["<cr>"] = { "open", config = { expand_nested_files = true } }, -- expand nested file takes precedence
-      ["<esc>"] = "cancel", -- close preview or floating neo-tree window
-      ["P"] = { "toggle_preview", config = { use_float = true, use_image_nvim = false } },
-      ["<C-f>"] = { "scroll_preview", config = { direction = -10 } },
-      ["<C-b>"] = { "scroll_preview", config = { direction = 10 } },
-      -- ["l"] = "focus_preview",
-      -- ["S"] = "open_split",
-      -- ["S"] = "split_with_window_picker",
-      -- ["s"] = "open_vsplit",
-      -- ["sr"] = "open_rightbelow_vs",
-      -- ["sl"] = "open_leftabove_vs",
-      -- ["s"] = "vsplit_with_window_picker",
-      ["t"] = "open_tabnew",
-      -- ["<cr>"] = "open_drop",
-      -- ["t"] = "open_tab_drop",
-      ["w"] = "open_with_window_picker",
-      ["C"] = "close_node",
-      ["z"] = "close_all_nodes",
-      --["Z"] = "expand_all_nodes",
-      ["R"] = "refresh",
-      ["a"] = {
-        "add",
-        -- some commands may take optional config options, see `:h neo-tree-mappings` for details
-        config = {
-          show_path = "none", -- "none", "relative", "absolute"
+        end,
+      }, -- A list of functions
+      window = { -- see https://github.com/MunifTanjim/nui.nvim/tree/main/lua/nui/popup for
+        mapping_options = { noremap = true, nowait = true },
+        mappings = {
+          [k("<2-LeftMouse>")] = "open",
+          [k("<esc>")] = "cancel", -- close preview or floating neo-tree window
+          [k("q")] = "close_window",
+          [k("w")] = "prev_source",
+          [k("f")] = "noop",
+          [k("p")] = "next_source",
+          [k("a")] = { "add", config = { show_path = "relative" } },
+          [k("r")] = "close_node",
+          -- [k('R')] = "navigate_up",
+          [k("s")] = "noop",
+          [k("t")] = "open",
+          [k("T")] = { "open_tabnew", config = { expand_nested_files = false } },
+          [k("d")] = "delete",
+          -- [k('h')] = "toggle_hidden",
+          [k("n")] = "rename",
+          [k("i")] = "show_file_details",
+          [k("o")] = "open_with_system_application",
+          [k("x")] = "cut_to_clipboard",
+          [k("c")] = "copy_to_clipboard",
+          [k("C")] = "copy_path_to_clipboard",
+          [k("v")] = "paste_from_clipboard",
+          [k("b")] = { "toggle_preview", config = { use_float = false } },
+          [k("B")] = { "toggle_preview", config = { use_float = true, use_image_nvim = false } },
+          [k("m")] = "move", -- takes text input for destination, also accepts the config.show_path and config.insert_as options
+          -- [k('.')] = "set_root",
+          [k("?")] = "show_help",
+          [k("<space>")] = { "toggle_node", nowait = true },
+
+          -- [k('<C-f>')] = "noop", -- { "scroll_preview", config = { direction = -10 } },
+          -- [k('<C-b>')] = "noop", -- { "scroll_preview", config = { direction = 10 } },
+          -- [k('<LeftRelease>')] = "noop", -- "open",
+          -- [k('l')] = "focus_preview",
+          -- [k('S')] = "open_split",
+          -- [k('S')] = "split_with_window_picker",
+          -- [k('s')] = "open_vsplit",
+          -- [k('sr')] = "open_rightbelow_vs",
+          -- [k('sl')] = "open_leftabove_vs",
+          -- [k('s')] = "vsplit_with_window_picker",
+          -- [k('t')] = "noop", -- "open_tabnew",
+          -- [k('<cr>')] = "open_drop",
+          -- [k('t')] = "open_tab_drop",
+          -- [k('w')] = "open_with_window_picker",
+          -- [k('C')] = "noop", -- "close_node",
+          -- [k('z')] = "noop", -- "close_all_nodes",
+          --[k('Z')] = "expand_all_nodes",
+          -- [k('R')] = "noop", -- "refresh",
+          -- [k('A')] = "noop", -- "add_directory", -- also accepts the config.show_path and config.insert_as options.
+          -- [k('r')] = "noop", -- "rename",
+          -- [k('c')] = "noop", -- "copy", -- takes text input for destination, also accepts the config.show_path and config.insert_as options
+          -- [k('e')] = "noop", -- "toggle_auto_expand_width",
+          -- [k('<')] = "noop", -- "prev_source",
+          -- [k('>')] = "noop", -- "next_source",
         },
       },
-      ["A"] = "add_directory", -- also accepts the config.show_path and config.insert_as options.
-      ["d"] = "delete",
-      ["r"] = "rename",
-      ["y"] = "copy_to_clipboard",
-      ["x"] = "cut_to_clipboard",
-      ["p"] = "paste_from_clipboard",
-      ["c"] = "copy", -- takes text input for destination, also accepts the config.show_path and config.insert_as options
-      ["m"] = "move", -- takes text input for destination, also accepts the config.show_path and config.insert_as options
-      ["e"] = "toggle_auto_expand_width",
-      ["q"] = "close_window",
-      ["?"] = "show_help",
-      ["<"] = "prev_source",
-      [">"] = "next_source",
-    }
-    opts.filesystem = opts.filesystem or {}
-    opts.filesystem.window = opts.filesystem.window or {} 
-    opts.filesystem.window.mappings = {
-      ["r"] = "noop", -- left
-      ["s"] = "noop", -- down
-      ["f"] = "noop", -- up
-      ["t"] = "focus_preview", -- right
+      filesystem = {
+        window = {
+          mappings = {
+            [k("R")] = "navigate_up",
+            [k("h")] = "toggle_hidden",
+            [k(".")] = "set_root",
+          },
+          other = {
+            [k("H")] = "noop", -- "toggle_hidden",
+            [k("<bs>")] = "noop", -- "navigate_up",
+            [k(".")] = "noop", -- "set_root",
 
-      ["H"] = "toggle_hidden",
-      ["/"] = "fuzzy_finder",
-      ["D"] = "fuzzy_finder_directory",
-      --["/"] = "filter_as_you_type", -- this was the default until v1.28
-      ["#"] = "fuzzy_sorter", -- fuzzy sorting using the fzy algorithm
-      -- ["D"] = "fuzzy_sorter_directory",
-      --["f"] = "filter_on_submit",
-      ["<C-x>"] = "clear_filter",
-      ["<bs>"] = "navigate_up",
-      ["."] = "set_root",
-      ["[g"] = "prev_git_modified",
-      ["]g"] = "next_git_modified",
-      ["i"] = "show_file_details",
-      ["o"] = { "show_help", nowait = false, config = { title = "Order by", prefix_key = "o" } },
-      ["oc"] = { "order_by_created", nowait = false },
-      ["od"] = { "order_by_diagnostics", nowait = false },
-      ["og"] = { "order_by_git_status", nowait = false },
-      ["om"] = { "order_by_modified", nowait = false },
-      ["on"] = { "order_by_name", nowait = false },
-      ["os"] = { "order_by_size", nowait = false },
-      ["ot"] = { "order_by_type", nowait = false },
-    }
-    opts.filesystem.window.fuzzy_finder_mappings = { -- define keymaps for filter popup window in fuzzy_finder_mode
-      ["<down>"] = "move_cursor_down",
-      ["<C-n>"] = "move_cursor_down",
-      ["<up>"] = "move_cursor_up",
-      ["<C-p>"] = "move_cursor_up",
-    }
-    opts.buffer = opts.buffer or {}
-    opts.buffer.window = opts.buffer.window or {}
-    opts.buffer.window.mappings = {
-      ["<bs>"] = "navigate_up",
-      ["."] = "set_root",
-      ["bd"] = "buffer_delete",
-      ["i"] = "show_file_details",
-      ["o"] = { "show_help", nowait = false, config = { title = "Order by", prefix_key = "o" } },
-      ["oc"] = { "order_by_created", nowait = false },
-      ["od"] = { "order_by_diagnostics", nowait = false },
-      ["om"] = { "order_by_modified", nowait = false },
-      ["on"] = { "order_by_name", nowait = false },
-      ["os"] = { "order_by_size", nowait = false },
-      ["ot"] = { "order_by_type", nowait = false },
-    }
-    opts.git_status = opts.git_status or {}
-    opts.git_status.window = opts.git_status.window or {}
-    opts.git_status.window.mappings = {
-      ["A"] = "git_add_all",
-      ["gu"] = "git_unstage_file",
-      ["ga"] = "git_add_file",
-      ["gr"] = "git_revert_file",
-      ["gc"] = "git_commit",
-      ["gp"] = "git_push",
-      ["gg"] = "git_commit_and_push",
-      ["i"] = "show_file_details",
-      ["o"] = { "show_help", nowait = false, config = { title = "Order by", prefix_key = "o" } },
-      ["oc"] = { "order_by_created", nowait = false },
-      ["od"] = { "order_by_diagnostics", nowait = false },
-      ["om"] = { "order_by_modified", nowait = false },
-      ["on"] = { "order_by_name", nowait = false },
-      ["os"] = { "order_by_size", nowait = false },
-      ["ot"] = { "order_by_type", nowait = false },
-    }
-    opts.document_symbols = opts.document_symbols or {}
-    opts.document_symbols.window = opts.documents_synbols.window or {}
-    opts.document_symbols.window.mappings = {
-      ["r"] = "noop", -- left
-      ["s"] = "noop", -- down
-      -- ["f"] = "noop", -- up
-      ["t"] = "noop", -- right
+            [k("r")] = "noop", -- "noop", -- left
+            [k("s")] = "noop", -- "noop", -- down
+            [k("f")] = "noop", -- "noop", -- up
+            [k("t")] = "open", -- "focus_preview", -- right
+            [k("/")] = "noop", -- "fuzzy_finder",
+            [k("D")] = "noop", -- "fuzzy_finder_directory",
+            --[k('/')] = "noop", -- "filter_as_you_type", -- this was the default until v1.28
+            [k("#")] = "noop", -- "fuzzy_sorter", -- fuzzy sorting using the fzy algorithm
+            -- [k('D')] = "noop", -- "fuzzy_sorter_directory",
+            --[k('f')] = "noop", -- "filter_on_submit",
+            [k("<C-x>")] = "noop", -- "clear_filter",
+            [k("[g")] = "noop", -- "prev_git_modified",
+            [k("]g")] = "noop", -- "next_git_modified",
+            [k("i")] = "noop", -- "show_file_details",
+            [k("o")] = "noop", -- { "show_help", nowait = false, config = { title = "Order by", prefix_key = "o" } },
+            [k("oc")] = "noop", -- { "order_by_created", nowait = false },
+            [k("od")] = "noop", -- { "order_by_diagnostics", nowait = false },
+            [k("og")] = "noop", -- { "order_by_git_status", nowait = false },
+            [k("om")] = "noop", -- { "order_by_modified", nowait = false },
+            [k("on")] = "noop", -- { "order_by_name", nowait = false },
+            [k("os")] = "noop", -- { "order_by_size", nowait = false },
+            [k("ot")] = "noop", -- { "order_by_type", nowait = false },
+            --]]
+          },
+          fuzzy_finder_mappings = { -- define keymaps for filter popup window in fuzzy_finder_mode
+            [k("<down>")] = "noop", -- "move_cursor_down",
+            [k("<C-n>")] = "noop", -- "move_cursor_down",
+            [k("<up>")] = "noop", -- "move_cursor_up",
+            [k("<C-p>")] = "noop", -- "move_cursor_up",
+          },
+        },
+      },
+      buffers = {
+        window = {
+          mappings = {},
+          other = {
+            [k("R")] = "navigate_up",
+            [k(".")] = "set_root",
 
-      ["<cr>"] = "jump_to_symbol",
-      ["o"] = "jump_to_symbol",
-      ["A"] = "noop", -- also accepts the config.show_path and config.insert_as options.
-      ["d"] = "noop",
-      ["y"] = "noop",
-      ["x"] = "noop",
-      ["p"] = "noop",
-      ["c"] = "noop",
-      ["m"] = "noop",
-      ["a"] = "noop",
-      ["/"] = "filter",
-      -- ["f"] = "filter_on_submit",
-    }
-    if opts.example and opts.example.window then
-      opts.example.window.mappings = {}
-    end
-    -- { ["<cr>"] = "toggle_node", ["<C-e>"] = "example_command", ["d"] = "show_debug_info", }
-
-    return opts
-  end,
-},
-{
+            -- [k('h')] = "toggle_hidden",
+            [k("<bs>")] = "noop", -- "navigate_up",
+            [k(".")] = "noop", -- "set_root",
+            [k("bd")] = "noop", -- "buffer_delete",
+            [k("o")] = "noop", -- { "show_help", nowait = false, config = { title = "Order by", prefix_key = "o" } },
+            [k("oc")] = "noop", -- { "order_by_created", nowait = false },
+            [k("od")] = "noop", -- { "order_by_diagnostics", nowait = false },
+            [k("om")] = "noop", -- { "order_by_modified", nowait = false },
+            [k("on")] = "noop", -- { "order_by_name", nowait = false },
+            [k("os")] = "noop", -- { "order_by_size", nowait = false },
+            [k("ot")] = "noop", -- { "order_by_type", nowait = false },
+          },
+        },
+      },
+      git_status = {
+        window = {
+          mappings = {},
+          other = {
+            [k("A")] = "noop", -- "git_add_all",
+            [k("gu")] = "noop", -- "git_unstage_file",
+            [k("ga")] = "noop", -- "git_add_file",
+            [k("gr")] = "noop", -- "git_revert_file",
+            [k("gc")] = "noop", -- "git_commit",
+            [k("gp")] = "noop", -- "git_push",
+            [k("gg")] = "noop", -- "git_commit_and_push",
+            [k("i")] = "noop", -- "show_file_details",
+            [k("o")] = "noop", -- { "show_help", nowait = false, config = { title = "Order by", prefix_key = "o" } },
+            [k("oc")] = "noop", -- { "order_by_created", nowait = false },
+            [k("od")] = "noop", -- { "order_by_diagnostics", nowait = false },
+            [k("om")] = "noop", -- { "order_by_modified", nowait = false },
+            [k("on")] = "noop", -- { "order_by_name", nowait = false },
+            [k("os")] = "noop", -- { "order_by_size", nowait = false },
+            [k("ot")] = "noop", -- { "order_by_type", nowait = false },
+          },
+        },
+      },
+      document_symbols = {
+        window = {
+          mappings = {},
+        },
+      },
+    },
+  },
+  {
     "akinsho/bufferline.nvim",
     event = "VeryLazy",
     keys = {
-        --{ "<leader>bp", "<Cmd>BufferLineTogglePin<CR>", desc = "Toggle Pin" },
-        --{ "<leader>bP", "<Cmd>BufferLineGroupClose ungrouped<CR>", desc = "Delete Non-Pinned Buffers" },
-        --{ "<leader>bo", "<Cmd>BufferLineCloseOthers<CR>", desc = "Delete Other Buffers" },
-        --{ "<leader>br", "<Cmd>BufferLineCloseRight<CR>", desc = "Delete Buffers to the Right" },
-        --{ "<leader>bl", "<Cmd>BufferLineCloseLeft<CR>", desc = "Delete Buffers to the Left" },
-        { "<S-h>", false },
-        { "<S-l>", false },
-        --{ "[b", "<cmd>BufferLineCyclePrev<cr>", desc = "Prev Buffer" },
-        --{ "]b", "<cmd>BufferLineCycleNext<cr>", desc = "Next Buffer" },
-        --{ "[B", "<cmd>BufferLineMovePrev<cr>", desc = "Move buffer prev" },
-        --{ "]B", "<cmd>BufferLineMoveNext<cr>", desc = "Move buffer next" },
+      --{ "<leader>bp", "<Cmd>BufferLineTogglePin<CR>", desc = "Toggle Pin" },
+      --{ "<leader>bP", "<Cmd>BufferLineGroupClose ungrouped<CR>", desc = "Delete Non-Pinned Buffers" },
+      --{ "<leader>bo", "<Cmd>BufferLineCloseOthers<CR>", desc = "Delete Other Buffers" },
+      --{ "<leader>br", "<Cmd>BufferLineCloseRight<CR>", desc = "Delete Buffers to the Right" },
+      --{ "<leader>bl", "<Cmd>BufferLineCloseLeft<CR>", desc = "Delete Buffers to the Left" },
+      { "<S-h>", false },
+      { "<S-l>", false },
+      --{ "[b", "<cmd>BufferLineCyclePrev<cr>", desc = "Prev Buffer" },
+      --{ "]b", "<cmd>BufferLineCycleNext<cr>", desc = "Next Buffer" },
+      --{ "[B", "<cmd>BufferLineMovePrev<cr>", desc = "Move buffer prev" },
+      --{ "]B", "<cmd>BufferLineMoveNext<cr>", desc = "Move buffer next" },
     },
-},
-{
+  },
+  {
     "folke/flash.nvim", -- https://www.lazyvim.org/plugins/editor#flashnvim
     labels = "arstneioufcmx,yw",
     label = {
-        rainbow = {
-            enabled = true,
-            -- number between 1 and 9
-            shade = 5,
-        },
+      rainbow = {
+        enabled = true,
+        -- number between 1 and 9
+        shade = 5,
+      },
     },
-    keys = function() return {
-        { m('flash-f').src, mode=m('flash-f').mode},
-        { m('flash-F').src, mode=m('flash-F').mode},
-        { m('flash-t').src, mode=m('flash-t').mode},
-        { m('flash-T').src, mode=m('flash-T').mode},
-        { m('flash-;').src, mode=m('flash-;').mode},
-        { m('flash-,').src, mode=m('flash-,').mode},
-        { m('flash-jump').src, 
-            mode = m('flash-jump').mode, 
-            function() require("flash").jump() end, 
-            desc = "Flash"
+    keys = function()
+      return {
+        { flash('f').key, mode = flash('f').mode },
+        { flash('F').key, mode = flash('F').mode },
+        { flash('t').key, mode = flash('t').mode },
+        { flash('T').key, mode = flash('T').mode },
+        { flash(',').key, mode = flash(',').mode },
+        { flash(';').key, mode = flash(';').mode },
+        {
+          flash('jump').key,
+          mode = flash('jump').mode,
+          function()
+            require("flash").jump()
+          end,
+          desc = "Flash",
         },
-        { m('flash-tss').src, 
-            mode = m('flash-tss').mode, 
-            function() require("flash").treesitter_search() end, 
-            desc = "Treesitter Search"
+        {
+          flash('tss').key,
+          mode = flash('tss').mode,
+          function()
+            require("flash").treesitter_search()
+          end,
+          desc = "Treesitter Search",
         },
-        { m('flash-ts').src, 
-            mode = m('flash-ts').mode, 
-            function() require("flash").treesitter() end, desc = "Flash Treesitter"
+        {
+          flash('ts').key,
+          mode = flash('ts').mode,
+          function()
+            require("flash").treesitter()
+          end,
+          desc = "Flash Treesitter",
         },
-    } end,
-    opts = { modes = { char = {
-        enabled=true,
-        keys = {
-            ["f"] = m('flash-f').src, 
-            ["F"] = m('flash-F').src,
-            ["t"] = m('flash-t').src,
-            ["T"] = m('flash-T').src,
-            [";"] = m('flash-;').src, 
-            [","] = m('flash-,').src,
+      }
+    end,
+    opts = {
+      modes = {
+        search = { enabled = false },
+        char = {
+          enabled = true,
+          keys = {
+            ["f"] = flash('f').key,
+            ["F"] = flash('F').key,
+            ["t"] = flash('t').key,
+            ["T"] = flash('T').key,
+            [";"] = flash(';').key,
+            [","] = flash(',').key,
+          },
+          label = { exclude = "hjkliardc" },
         },
-        label = { exclude = "hjkliardc" },
-    }}}
-},
+      },
+    },
+  },
 }
 
 --[[

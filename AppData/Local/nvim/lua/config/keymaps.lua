@@ -3,6 +3,8 @@
 -- Add any additional keymaps here
 ------------------------------------------------------
 
-local keymaps = require("my-config.keymaps")
-keymaps.register_mappings()
+-- local keymaps = require("my-config.keymaps")
+-- keymaps.register_mappings()
 
+local keymaps = require("my-config.keys")
+keymaps.setup_keymaps()
