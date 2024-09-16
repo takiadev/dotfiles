@@ -1,5 +1,6 @@
 return {
     'gsuuon/tshjkl.nvim',
+    enabled=false,
     keys = {
         {'<leader>ct', mode={'n', 'x'}, desc="Open TS-HJKL mode"},
     },

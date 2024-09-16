@@ -21,15 +21,18 @@ local function k (str)
 end
 
 
-
-
--- vim.notify(vim.inspect(flash('f')))
-
 -- use:
 -- keys = {...} to add new keys
 -- keys = function() ... to overwrite all keys
 
 return {
+  {
+    "neovim/nvim-lspconfig",
+    opts = function()
+      local keys = require("lazyvim.plugins.lsp.keymaps").get()
+      keys[#keys + 1] = { "<A-p>", false }
+    end,
+  },
   {
     "nvim-treesitter/nvim-treesitter",
     keys = {
@@ -117,7 +120,9 @@ return {
           -- [k('.')] = "set_root",
           [k("?")] = "show_help",
           [k("<space>")] = { "toggle_node", nowait = true },
-
+          [k("l")] = "noop",
+          [k("e")] = "open_split", -- e is down in nuei navigation
+          [k("i")] = "open_vsplit", -- i is right in nuei navigation
           -- [k('<C-f>')] = "noop", -- { "scroll_preview", config = { direction = -10 } },
           -- [k('<C-b>')] = "noop", -- { "scroll_preview", config = { direction = 10 } },
           -- [k('<LeftRelease>')] = "noop", -- "open",
