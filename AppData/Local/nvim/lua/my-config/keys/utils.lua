@@ -1,106 +1,78 @@
 local M = {}
 
- -- Input  : {[<key>] = {<mode> = "<action>"}}
- -- Output : {[<action>] = {mode = "<key>"}}
- function M.make_action_to_keys_array(keys)
-	local pivoted = {}
-	for key, modes in pairs(keys) do
-		for mode, action in pairs(modes) do
-			if action ~= "" then -- Skip empty actions
-				pivoted[action] = pivoted[action] or {}
-				pivoted[action][mode] = key
-			end
-		end
-	end
-	return pivoted
+local function convert_keys(keys)
+  local converted_keys = {}
+
+  for key_combination, modes in pairs(keys) do
+    converted_keys[key_combination] = {}
+    for mode_string, action in pairs(modes) do
+      -- Iterate over each character in mode_string using gmatch
+      for mode in mode_string:gmatch(".") do
+        -- Create individual entries for each mode
+        converted_keys[key_combination][mode] = action
+      end
+    end
+  end
+
+  return converted_keys
 end
 
--- Input  : "<action>"
--- Output : {<mode> = "<key>"}  
-function M.keys_for_action(action)
-	local mapping = {}
-	for key, modes in pairs(keys) do
-		for mode, mapped_action in pairs(modes) do
-			if mapped_action == action then
-				mapping[mode] = key
-			end
-		end
-	end
-	return mapping
-end
+local function convert_actions(actions)
+  local converted_actions = {}
 
--- Input  : "<action>"
--- Output : {[<key>] = {mode1, ...}}
-function M.keys_for_action2(action)
-	local mapping = {}
-	for key, modes in pairs(keys) do
-		for mode, mapped_action in pairs(modes) do
-			if mapped_action == action then
-				if not mapping[key] then
-					mapping[key] = {}
-				end
-				table.insert(mapping[key], mode)
-			end
-		end
-	end
-	return mapping
-end
+  for action_name, modes in pairs(actions) do
+    converted_actions[action_name] = {}
+    for mode_string, data in pairs(modes) do
+      -- Iterate over each character in mode_string using gmatch
+      for mode in mode_string:gmatch(".") do
+        -- Create individual entries for each mode
+        converted_actions[action_name][mode] = data
+      end
+    end
+  end
 
-
--- Input  : {[<action>] = {[<mode>] = {plugin = <plugin>, dst = <dst>, opts = <opts>  }}}
--- Output : {[<plugin>] = {[<dst>] = {[<action>] = {[<mode>] = <opts>  }]}}}
-function M.make_plugins_to_action_array(actions)
-	local plugins = {}
-	for action, modes in pairs(actions) do
-		for mode, data in pairs(modes) do
-			local p = data.plugin
-			-- print("make pta: " .. action .. " - " .. mode .. " - " .. (p or ""))
-            if p then
-                local dst = data.dst
-                plugins[p] = plugins[p] or {}
-                plugins[p][dst] = plugins[p][dst] or {}
-				plugins[p][dst][action] = plugins[p][dst][action] or {}
-                plugins[p][dst][action][mode] = data.opts
-            end
-        end
-	end
-	-- print(vim.inspect(plugins))
-	return plugins
+  return converted_actions
 end
 
 -- Input  : {[<key>] = {[<mode>] = "<action>"}}
 -- Input  : {[<action>] = {[<mode>] = {plugin = <plugin>, dst = <dst>, opts = <opts>}}}
 -- Output : {[<plugin>] = { [<dst>] = { [<key>] = { [<mode>] = <opts> }}}}
 function M.make_plugins_to_keys_array(keys, actions)
-	-- Output : {[<action>] = {[<mode>] = "<key>"}}
-	local a_to_k = M.make_action_to_keys_array(keys)
-	
-	-- Output : {[<plugin>] = {[<dst>] = {[<action>] = {mode=<mode>, opts=<opts>}}}}
-	local p_to_a = M.make_plugins_to_action_array(actions)
-	local result = {}
-	for plugin, dsts in pairs(p_to_a) do
-		if plugin then
-			result[plugin] = {}
-			for dst, actions in pairs(dsts) do
-				if dst and dst ~= "" then
-					result[plugin][dst] = {}
-					for action, modes in pairs(actions) do
-						for mode, opts in pairs(modes) do
-							local key = a_to_k[action][mode]
-						if key then
-							result[plugin][dst][key] = result[plugin][dst][key] or {}
-							result[plugin][dst][key][mode] = opts -- ideally, should deepcopy here
-						end
-					end
-					end
-				end
-			end
-		end
-	end
-	
-	-- print(vim.inspect(p_to_a))
-	-- print(vim.inspect(result))
-	return result
+  keys = convert_keys(keys)
+  actions = convert_actions(actions)
+  local plugins_to_keys_array = {}
+
+  for key, modes in pairs(keys) do
+    for mode_str, action in pairs(modes) do
+      for mode in mode_str:gmatch(".") do
+        local action_data = actions[action]
+
+        if action_data and action_data[mode] then
+          local plugin = action_data[mode].plugin or "unknown_plugin"
+          local dst = action_data[mode].dst or "unknown_dst"
+          local opts = action_data[mode].opts or {}
+
+          if not plugins_to_keys_array[plugin] then
+            plugins_to_keys_array[plugin] = {}
+          end
+
+          if not plugins_to_keys_array[plugin][dst] then
+            plugins_to_keys_array[plugin][dst] = {}
+          end
+
+          if not plugins_to_keys_array[plugin][dst][key] then
+            plugins_to_keys_array[plugin][dst][key] = {}
+          end
+
+          plugins_to_keys_array[plugin][dst][key][mode] = opts
+        else
+          print("Warning: Missing action data for key: " .. key .. " and mode: " .. mode)
+        end
+      end
+    end
+  end
+  return plugins_to_keys_array
 end
 
 return M
+
