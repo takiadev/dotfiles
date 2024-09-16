@@ -12,6 +12,7 @@ choco install ripgrep
 choco install fd
 choco install lazygit
 choco install luarocks
+choco install gzip
 ```
 
 You also need to install treesitter, see [Installing Treesitter properly in Windows 11](https://takia.dev/nvim-treesitter-windows-11/)
