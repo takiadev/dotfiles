@@ -11,6 +11,9 @@ keymaps.setup_keymaps()
 
 local resize = require('lib.resize_window')
 
+-- space adds an undo breakpoint
+vim.api.nvim_set_keymap('i', '<Space>', '<C-g>u<Space>', { noremap = true, silent = true })
+
 -- Bindings for growing and shrinking window edges
 local Window = require('lib.resize_window')
 vim.keymap.set('n', '<C-Right>', Window.shrink_left_edge, { noremap = true, silent = true })  -- Shrink left
@@ -22,12 +25,12 @@ vim.keymap.set('n', '<C-Up>', Window.grow_top_edge, { noremap = true, silent = t
 vim.keymap.set('n', '<C-S-Up>', Window.shrink_bottom_edge, { noremap = true, silent = true })   -- Shrink bottom
 vim.keymap.set('n', '<C-S-Down>', Window.grow_bottom_edge, { noremap = true, silent = true })     -- Grow bottom
 
-
-
+-- local Custom = require('lib.custom')
+-- vim.keymap.set({'n', 'i', 'o', 'x', 't', 'c'}, '<M-r>', Custom.focus_window_left_or_open_neotree, {noremap=true, silent=true})
 
 -- vim.keymap.set('n', 'l', open_node, { noremap = true, silent = true })
 
--- TODO migrate to keys
+-- TODO migrate these mappings to keys
 -- Add ctrl+tab to switch buffer
 -- move bindings 
 -- CODE:

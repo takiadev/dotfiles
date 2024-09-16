@@ -10,12 +10,8 @@ return {
     n = { src = "N", plugin = "keymap", dst = "C", opts = { desc = "do_change_eol" } },
   },
   do_comment_line = {
-    n = {
-      src = "Q",
-      plugin = "keymap",
-      dst = "gcc",
-      opts = { noremap = false, desc = "do_comment_line", remap = true },
-    },
+    n = { plugin = "keymap", dst = "gcc", opts = { desc = "do_comment_line", remap = true }, },
+    i = { plugin = "keymap", dst = '<cmd>normal gcc<CR>', opts = { remap = true, silent = true },} 
   },
   do_copy_eol = {
     n = { src = "C", plugin = "keymap", dst = '"+Y', opts = { desc = "do_copy_eol" } },
@@ -38,6 +34,17 @@ return {
   do_insert_bol = {
     n = { src = "I", plugin = "keymap", dst = "I", opts = { desc = "do_insert_bol" } },
   },
+  do_newline_insert = {
+    nx = { src = "o", plugin = "keymap", dst = "o", opts = { noremap = true, silent = true, desc = "Insert newline and enter insert mode" } },
+    i = { src = "<M-o>", plugin = "keymap", dst = "<Cmd>normal! o<CR>", opts = { noremap = true, silent = true, desc = "Insert newline in insert mode" } },
+  },
+  do_newline_insert_before = {
+      nx = { src = "O", plugin = "keymap", dst = "O", opts = { noremap = true, silent = true, desc = "Insert newline before and enter insert mode" } },
+      i = { src = "<M-O>", plugin = "keymap", dst = "<Cmd>normal! O<CR>", opts = { noremap = true, silent = true, desc = "Insert newline before in insert mode" } },
+  },
+  do_nothing = {
+    ncisotvx = { src= "s", plugin = "keymap", dst = "<nop>", opts = {noremap = true, desc = ""} },
+  },
   do_paste = {
     nvx = { src = "<C-v>", plugin = "keymap", dst = '"+p', opts = { noremap = true, desc = "Paste" } },
     i = { src = "<C-v>", plugin = "keymap", dst = '<Esc>"+pa', opts = { noremap = true, desc = "Paste" } },
@@ -56,7 +63,7 @@ return {
     n = { src = "j", plugin = "keymap", dst = "q", opts = { desc = "do_record_macro" } },
   },
   do_redo = {
-    n = { src = "W", plugin = "keymap", dst = "<C_r>", opts = { desc = "do_redo" } },
+    n = { src = "W", plugin = "keymap", dst = "<C-r>", opts = { desc = "do_redo" } },
   },
   do_repeat_last_cmd = {
     nx = { src = ";", plugin = "keymap", dst = ".", opts = { desc = "do_repeat_last_cmd" } },
@@ -107,6 +114,9 @@ return {
   do_set_mark = {
     nx = { src = "m", plugin = "keymap", dst = "m", opts = { desc = "do_set_mark" } },
   },
+  do_ts_select = {
+    nx = { src = "U", plugin = "keymap", dst = "<Plug>flash.tss", opts = { remap=true, desc = "mo_ts_find" } },
+  },
   do_undo = {
     nvx = { src = "<C-z>", plugin = "keymap", dst = "u", opts = { noremap = true, desc = "Undo" } },
     i = { src = "<C-z>", plugin = "keymap", dst = "<Esc>u", opts = { noremap = true, desc = "Undo" } },
@@ -115,38 +125,87 @@ return {
   do_z_prefix = {
     nxviocts = { src="z", plugin = "keymap", dst = "z", opts={remap=true, desc= "Z prefix"}},
   },
-  mo_down = {
-    nox = {
-      src = "s",
-      plugin = "keymap",
-      dst = "v:count == 0 ? 'gj' : 'j'",
-      opts = { silent = true, expr = true, desc = "mo_down" },
-    },
-  },
+  do_scroll_up_3 = {
+    nox = { src="sf", plugin="keymap", dst="3<C-y>", opts={noremap=true, desc="Scroll screen up by 3 lines"} },
+},
+do_scroll_up_1 = {
+    nox = { src="sF", plugin="keymap", dst="<C-y>", opts={noremap=true, desc="Scroll screen up by 1 line"} },
+},
+do_scroll_down_3 = {
+    nox = { src="ss", plugin="keymap", dst="3<C-e>", opts={noremap=true, desc="Scroll screen down by 3 lines"} },
+},
+do_scroll_down_1 = {
+    nox = { src="sS", plugin="keymap", dst="<C-e>", opts={noremap=true, desc="Scroll screen down by 1 line"} },
+},
+mo_last_jump = {
+    nox = { src="sp", plugin="keymap", dst="``", opts={noremap=true, desc="Jump to last jump"} },
+},
+mo_last_change = {
+    nox = { src="si", plugin="keymap", dst="`\"", opts={noremap=true, desc="Jump to last change"} },
+},
+mo_last_insert = {
+    nox = { src="sy", plugin="keymap", dst="`.", opts={noremap=true, desc="Jump to last insert"} },
+},
+mo_prev_jump_list = {
+    nox = { src="s,", plugin="keymap", dst="<C-o>", opts={noremap=true, desc="Go to previous jump list"} },
+},
+mo_next_jump_list = {
+    nox = { src="s.", plugin="keymap", dst="<C-i>", opts={noremap=true, desc="Go to next jump list"} },
+},
+mo_prev_change_list = {
+    nox = { src="s<", plugin="keymap", dst="g;", opts={noremap=true, desc="Go to previous change list"} },
+},
+mo_next_change_list = {
+    nox = { src="s>", plugin="keymap", dst="g,", opts={noremap=true, desc="Go to next change list"} },
+},
+mo_matching_pair = {
+    nox = { src="p", plugin="keymap", dst="%", opts={noremap=true, desc="Jump to matching pair"} },
+},
+mo_bol = {
+    nox = { src="sa", plugin="keymap", dst="0", opts={noremap=true, desc="Move to beginning of line"} },
+},
+mo_bol_nonblank = {
+    nox = { src="sr", plugin="keymap", dst="^", opts={noremap=true, desc="Move to first non-blank character of line"} },
+},
+mo_eol = {
+    nox = { src="st", plugin="keymap", dst="$", opts={noremap=true, desc="Move to end of line"} },
+},
+mo_start_of_word = {
+    nox = { src="sw", plugin="keymap", dst="w", opts={noremap=true, desc="Move to start of next word"} },
+},
+mo_jump_to_line = {
+    nox = { src="sf", plugin="keymap", dst="<Plug>flash.line", opts={remap=true, desc="Jump to specific line"} },
+},
+mo_prev_start_of_word = {
+    nox = { src="sb", plugin="keymap", dst="b", opts={noremap=true, desc="Move to start of previous word"} },
+},
+mo_end_of_word = {
+    nox = { src="se", plugin="keymap", dst="e", opts={noremap=true, desc="Move to end of word"} },
+},
+mo_next_match = {
+  nox = { src="", plugin="keymap", dst="n", opts={noremap=true, desc="Go to next match in search"} },
+},
+mo_prev_match = {
+    nox = { src="", plugin="keymap", dst="N", opts={noremap=true, desc="Go to previous match in search"} },
+},
+
   mo_find_char = {
-    nx = { src = "l", plugin = "flash", dst = "f", opts = { desc = "mo_find_char" } },
+    nox = {plugin="keymap", dst="<Plug>flash.f", opts = {desc = "mo_find_char", remap=true,}},
   },
-  mo_left = {
-    nox = { src = "r", plugin = "keymap", dst = "h", opts = { desc = "mo_left" } },
-  },
-  mo_next_match = {
-    nox = { src = "", plugin = "keymap", dst = "n", opts = {desc = "mo_next_match", noremap=true} },
-  },
-  mo_prev_match = {
-    nox = { src = "", plugin = "keymap", dst = "p", opts = {desc = "mo_prev_match", noremap=true} },
-  },
-  
+  mo_till_char = {
+    nox = {plugin="keymap", dst="<Plug>flash.t", opts = {desc = "mo_till_char", remap=true,}},
+  },  
   mo_repeat_find = {
-    nox = { src = ",", plugin = "flash", dst = ";", opts = { desc = "mo_repeat_find" } },
+    nox = {plugin="keymap", dst="<Plug>flash.;", opts = {desc = "mo_repeat_find", remap=true,}},
   },
   mo_repeat_rfind = {
-    nox = { src = ",", plugin = "flash", dst = ",", opts = { desc = "mo_repeat_rfind" } },
+    nox = {plugin="keymap", dst="<Plug>flash.,", opts = { remap=true, desc = "mo_repeat_rfind" } },
   },
   mo_rfind_char = {
-    nx = { src = "l", plugin = "flash", dst = "F", opts = { desc = "mo_find_char" } },
+    nox = {plugin="keymap", dst="<Plug>flash.F", opts = { remap=true, desc = "mo_rfind_char" } },
   },
-  mo_right = {
-    nox = { src = "t", plugin = "keymap", dst = "l", opts = { desc = "mo_right" } },
+  mo_rtill_char = {
+    nox = {plugin="keymap", dst="<Plug>flash.T", opts = { remap=true, desc = "mo_rtill_char"}},
   },
   mo_screen_bottom = {
     nox = { src = "T", plugin = "keymap", dst = "L", opts = { desc = "mo_screen_bottom" } },
@@ -154,20 +213,36 @@ return {
   mo_screen_top = {
     nox = { src = "R", plugin = "keymap", dst = "H", opts = { desc = "mo_screen_top" } },
   },
-  mo_ultra_find = {
-    nx = { src = "u", plugin = "flash", dst = "jump", opts = { desc = "mo_ultra_find" } },
+  mo_find_pair = {
+    nox = { src = "u", plugin = "keymap", dst = "<Plug>flash.jump", opts = { remap=true, desc = "mo_find_pair" } },
   },
-  mo_ultra_rfind = {
-    nx = { src = "U", plugin = "flash", dst = "ts", opts = { desc = "mo_ultra_rfind" } },
+  mo_rfind_pair = {
+    nox = { src = "U", plugin = "keymap", dst = "F", opts = { noremap = true, desc = "mo_rfind_pair" } },
   },
-  mo_up = {
-    nox = {
-      src = "f",
-      plugin = "keymap",
-      dst = "v:count == 0 ? 'gk' : 'k'",
-      opts = { silent = true, expr = true, desc = "mo_up" },
+  mo_ts_find = {
+    nox = { src = "U", plugin = "keymap", dst = "<Plug>flash.ts", opts = { remap=true, desc = "mo_ts_find" } },
+  },
+    mo_up = {
+      nox = { src = "f", plugin = "keymap", dst = "v:count == 0 ? 'gk' : 'k'", opts = { silent = true, expr = true, desc = "Move cursor ↑" }, },
+      i = { src = "", plugin = "keymap", dst = "<Up>", opts = { silent = true, expr = false, desc = "Move cursor ↑" }, },
+      t = { src = "", plugin = "keymap", dst = "<C-\\><C-N><C-w>k", opts = { silent = true, expr = false, desc = "Move cursor ↑ in terminal mode" }, },
     },
-  },
+    mo_down = {
+      nox = { src = "s", plugin = "keymap", dst = "v:count == 0 ? 'gj' : 'j'", opts = { silent = true, expr = true, desc = "Move cursor ↓" }, },
+      i = { src = "", plugin = "keymap", dst = "<Down>", opts = { silent = true, expr = false, desc = "Move cursor ↓" }, },
+      t = { src = "", plugin = "keymap", dst = "<C-\\><C-N><C-w>j", opts = { silent = true, expr = false, desc = "Move cursor ↓ in terminal mode" }, },
+    },
+    mo_left = {
+      nox = { src = "a", plugin = "keymap", dst = "h", opts = { silent = true, desc = "Move cursor ←" }, },
+      i = { src = "", plugin = "keymap", dst = "<Left>", opts = { silent = true, expr = false, desc = "Move cursor ←" }, },
+      t = { src = "", plugin = "keymap", dst = "<C-\\><C-N><C-w>h", opts = { silent = true, expr = false, desc = "Move cursor ← in terminal mode" }, },
+    },
+    mo_right = {
+      nox = { src = "d", plugin = "keymap", dst = "l", opts = { silent = true, desc = "Move cursor →" }, },
+      i = { src = "", plugin = "keymap", dst = "<Right>", opts = { silent = true, expr = false, desc = "Move cursor →" }, },
+      t = { src = "", plugin = "keymap", dst = "<C-\\><C-N><C-w>l", opts = { silent = true, expr = false, desc = "Move cursor → in terminal mode" }, },
+    },
+
   op_around = {
     x = { src = "y", plugin = "keymap", dst = "a", opts = { desc = "op_around" } },
   },
@@ -176,6 +251,9 @@ return {
   },
   op_surround = {
     x = { src = "s", plugin = "keymap", dst = "s", opts = { desc = "op_surround" } },
+  },
+  prefix_motion_menu = {
+    nox = { src="s", plugin="which-key", dst="", opts={noremap=true, desc="Prefix for motion menu"} },
   },
   sys_next_buffer = {
     vx = {

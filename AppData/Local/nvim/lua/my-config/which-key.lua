@@ -211,14 +211,15 @@ end
 
 function M.register_descriptions(opts)
   local wk = require("which-key")
-  local keymaps = require("my-config.keymaps")
+  local keymaps = require("my-config.keys")
 
-  keymaps.for_each(function(m)
-    wk.add({m.src, mode=m.mode, desc= (m.opts.desc or "")})
+  keymaps.for_each_mapping(function(modes, lhs, rhs, opts)
+    -- print(vim.inspect({key=lhs, opts=opts}))
+    wk.add({lhs, mode=modes, desc= (opts.desc or "")})
   end)
 
   opts = opts or {}
-  --[[
+
   -- Operators
   if opts.operators then
     wk.add(M.operators)
@@ -240,7 +241,7 @@ function M.register_descriptions(opts)
       wk.add(M[preset])
     end
   end
-  --]]
 end
+
 
 return M

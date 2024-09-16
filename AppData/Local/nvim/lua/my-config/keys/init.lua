@@ -38,7 +38,7 @@ function M.get_key(plugin, dst)
   end
 end
 
-function M.setup_keymaps()
+function M.for_each_mapping(f)
   local dsts = M.get_plugin_data("keymap")
 
   local allowed_modes = "cinotvx"
@@ -51,7 +51,7 @@ function M.setup_keymaps()
             if opts.noremap == nil and opts.remap == nil then
               opts.noremap = true
             end
-            vim.keymap.set(mode, key, dst, opts)
+            f(mode, key, dst, opts)
           else
             print("Warning: Unsupported mode " .. mode .. " for key: " .. key)
           end
@@ -61,6 +61,10 @@ function M.setup_keymaps()
   else
     print("Warning: No entries found for plugin 'keymap'.")
   end
+end
+
+function M.setup_keymaps()
+  M.for_each_mapping(vim.keymap.set)
 end
 
 return M

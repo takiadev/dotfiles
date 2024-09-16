@@ -1,30 +1,25 @@
+
 local cmp = require("cmp")
 
--- local next_item = cmp.mapping.select_next_item()
-local function my_custom_function(fallback)
-    if cmp.visible() then
-      -- Perform custom action if completion is visible
-      cmp.select_next_item()
-    else
-      -- If no completion popup is visible, call the fallback to return to default behavior
-      fallback()
-    end
-  end
+-- local function select_down_or_go_down(fallback)
+--    if cmp.visible() then
+--      cmp.select_next_item({ behavior = cmp.SelectBehavior.Select })
+--    else
+--        vim.cmd('normal <up>')
+--    end
+-- end
 
 return {
     "hrsh7th/nvim-cmp",
     opts = {
         mapping = cmp.mapping.preset.insert({
-            ['<M-n>'] = cmp.mapping.abort(),
-            ['<M-e>'] = cmp.mapping(my_custom_function, { 'i', 's' }),
-            ['<M-u>'] = cmp.mapping.select_prev_item(),
-            ['<M-i>'] = LazyVim.cmp.confirm({ select = auto_select }),
-
-            ['<C-b>'] = cmp.mapping.scroll_docs(-4),
-            ['<C-f>'] = cmp.mapping.scroll_docs(4),
-            ['<C-Space>'] = cmp.mapping.complete(),
-            ['<C-e>'] = cmp.mapping.abort(),
-            ['<CR>'] = LazyVim.cmp.confirm({ select = auto_select }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
+            -- ['<M-n>'] = cmp.mapping.abort(),
+            ['<right>'] = LazyVim.cmp.confirm({ select = auto_select }),
+            -- ['<C-b>'] = cmp.mapping.scroll_docs(-4),
+            -- ['<C-f>'] = cmp.mapping.scroll_docs(4),
+            -- ['<C-Space>'] = cmp.mapping.complete(),
+            -- ['<C-e>'] = cmp.mapping.abort(),
+            -- ['<CR>'] = LazyVim.cmp.confirm({ select = auto_select }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
           })
     },
 }

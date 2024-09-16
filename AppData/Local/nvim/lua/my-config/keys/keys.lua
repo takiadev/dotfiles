@@ -13,9 +13,9 @@ return {
   ["c"] = { nx = "verb_copy" },
   ["D"] = { n = "do_delete_eol" },
   ["d"] = { nx = "verb_delete" },
-  ["E"] = { nx = "verb_go_prev" },
-  ["e"] = { x = "verb_go", n = "verb_go_next" },
-  ["f"] = { nox = "mo_up" },
+  ["E"] = { nx = "do_nothing"},
+  ["e"] = { nxo = "mo_find_pair"},  
+  ["f"] = { nox = "mo_jump_to_line" },
   ["g"] = { nx = "do_g_prefix" },
   ["h"] = { nxo = "mo_prev_match" },
   ["I"] = { n = "do_insert_bol" },
@@ -23,20 +23,46 @@ return {
   ["J"] = { n = "do_play_macro" },
   ["j"] = { n = "do_record_macro" },
   ["k"] = { nxo = "mo_next_match"   },
-  ["L"] = { nx = "mo_rfind_char" },
-  ["l"] = { nx = "mo_find_char" },
+  ["L"] = { nx = "do_nothing" },
+  ["l"] = { nx = "do_nothing" },
   ["m"] = { nx = "do_set_mark" },
   ["N"] = { n = "do_change_eol" },
   ["n"] = { nx = "verb_change" },
+  ["o"] = { nx = "do_newline_insert" },
+  ["<M-o>"] = { i = "do_newline_insert" },
+  ["O"] = { nx = "do_newline_insert_before" },
+  ["<M-O>"] = { i = "do_newline_insert_before" },
+  -- p
   ["Q"] = { n = "do_comment_line" },
   ["q"] = { n = "verb_comment" },
-  ["R"] = { nox = "mo_screen_top" },
-  ["r"] = { nox = "mo_left" },
-  ["s"] = { nox = "mo_down" },
-  ["T"] = { nox = "mo_screen_bottom" },
-  ["t"] = { nox = "mo_right" },
-  ["U"] = { nx = "mo_ultra_rfind" },
-  ["u"] = { nx = "mo_ultra_find" },
+  ["<M-q>"] = { i = "do_comment_line" },
+  ["R"] = { nox = "mo_rtill_char" },
+  ["r"] = { nox = "mo_rfind_char" },
+  
+  ["s"] = { nox = "prefix_motion_menu" },
+  ["sa"] = { nox = "mo_bol" },
+  ["sr"] = { nox = "mo_bol_nonblank" },
+  ["st"] = { nox = "mo_eol" },
+  ["sw"] = { nox = "mo_start_of_word" },
+  ["sf"] = { nox = "do_scroll_up_3" }, -- Scroll screen up by 3 lines
+  ["sF"] = { nox = "do_scroll_up_1" }, -- Scroll screen up by 1 line
+  ["ss"] = { nox = "do_scroll_down_3" }, -- Scroll screen down by 3 lines
+  ["sS"] = { nox = "do_scroll_down_1" }, -- Scroll screen down by 1 line
+  ["sp"] = { nox = "mo_last_jump" }, -- Jump to last jump (``)
+  ["si"] = { nox = "mo_last_change" }, -- Jump to last change (`")
+  ["sy"] = { nox = "mo_last_insert" }, -- Jump to last insert (`.)
+  ["s,"] = { nox = "mo_prev_jump_list" }, -- Go to previous jump list (Ctrl+O)
+  ["s."] = { nox = "mo_next_jump_list" }, -- Go to next jump list (Ctrl+I)
+  ["s<"] = { nox = "mo_prev_change_list" }, -- Go to previous change list (g;)
+  ["s>"] = { nox = "mo_next_change_list" }, -- Go to next change list (g,)
+  ["p"] = { nox = "mo_matching_pair" }, -- Jump to matching pair (%)
+  
+  ["sb"] = { nox = "mo_prev_start_of_word" },
+  ["se"] = { nox = "mo_end_of_word" },
+  ["T"] = { nox = "mo_till_char" },
+  ["t"] = { nox = "mo_find_char" },
+  ["U"] = { nx = "mo_ts_find" },
+  ["u"] = { nx = "do_ts_select" },
   ["V"] = { n = "do_paste_before" },
   ["v"] = { n = "do_paste" },
   ["W"] = { n = "do_redo" },
@@ -46,11 +72,18 @@ return {
   ["Y"] = { n = "do_append_eol" },
   ["y"] = { x = "op_around", n = "do_append" },
   ["z"] = { nx = "do_z_prefix" },
-  ["<A-f>"] = { inotvx = "sys_window_up" },
+  -- ["<CR>"] = { nox = "mo_next_match" }, -- Enter (next match)
+  -- ["<S-CR>"] = { nox = "mo_prev_match" }, -- Shift+Enter (previous match)
+  -- ["<A-f>"] = { inotvx = "sys_window_up" },
+  -- ["<A-r>"] = { inotvx = "sys_window_left" },
+  -- ["<A-s>"] = { inotvx = "sys_window_down" },
+  -- ["<A-t>"] = { inotvx = "sys_window_right" },
+  ["<A-f>"] = { inotvx = "mo_up" },
+  ["<A-r>"] = { inotvx = "mo_left" },
+  ["<A-s>"] = { inotvx = "mo_down" },
+  ["<A-t>"] = { inotvx = "mo_right" },
+
   ["<A-p>"] = { inotvx = "sys_next_buffer" },
-  ["<A-r>"] = { inotvx = "sys_window_left" },
-  ["<A-s>"] = { inotvx = "sys_window_down" },
-  ["<A-t>"] = { inotvx = "sys_window_right" },
   ["<A-w>"] = { inotvx = "sys_previous_buffer" },
   ["<C-a>"] = { intvx = "do_select_all" },
   ["<C-c>"] = { intvx = "verb_copy" },

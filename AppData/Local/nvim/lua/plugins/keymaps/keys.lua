@@ -11,15 +11,9 @@
 --     _G[letter] = Mappings.keys(letter)
 -- end
 
-
-local Keys = require("my-config.keys")
-local flash = function (n)
-  return Keys.get_key('flash', n)
-end
-local function k (str)
+local function k(str)
   return str
 end
-
 
 -- use:
 -- keys = {...} to add new keys
@@ -35,13 +29,10 @@ return {
   },
   {
     "nvim-treesitter/nvim-treesitter",
-    keys = {
-      { "gss", desc = "Increment Selection", mode = { "x", "n" } },
-      { "gsr", desc = "Decrement Selection", mode = "x" },
-    },
+    keys = {},
     opts = {
       incremental_selection = {
-        enable = true,
+        enable = false, -- we don't need this because flash.treesitter is better
         keymaps = {
           init_selection = "gss",
           node_incremental = "gsn",
@@ -70,6 +61,7 @@ return {
   {
     "nvim-neo-tree/neo-tree.nvim",
     keys = {
+      -- Default keys set by LazyVim
       -- { "<leader>fe", function() require("neo-tree.command").execute({ toggle = true, dir = LazyVim.root() }) end, desc = "Explorer NeoTree (Root Dir)", },
       -- { "<leader>fE", function() require("neo-tree.command").execute({ toggle = true, dir = vim.uv.cwd() }) end, desc = "Explorer NeoTree (cwd)", },
       -- { "<leader>e", "<leader>fe", desc = "Explorer NeoTree (Root Dir)", remap = true },
@@ -109,34 +101,38 @@ return {
           -- [k('h')] = "toggle_hidden",
           [k("n")] = "rename",
           [k("i")] = "show_file_details",
-          [k("o")] = "open_with_system_application",
+          [k("b")] = "open_with_system_application", -- b because seldom used
           [k("x")] = "cut_to_clipboard",
           [k("c")] = "copy_to_clipboard",
           [k("C")] = "copy_path_to_clipboard",
           [k("v")] = "paste_from_clipboard",
-          [k("b")] = { "toggle_preview", config = { use_float = false } },
-          [k("B")] = { "toggle_preview", config = { use_float = true, use_image_nvim = false } },
+          [k("g")] = { "toggle_preview", config = { use_float = false } },
+          [k("G")] = { "toggle_preview", config = { use_float = true, use_image_nvim = false } },
           [k("m")] = "move", -- takes text input for destination, also accepts the config.show_path and config.insert_as options
           -- [k('.')] = "set_root",
           [k("?")] = "show_help",
-          [k("<space>")] = { "toggle_node", nowait = true },
+          [k("<tab>")] = { "toggle_node", nowait = true },
+          [k("z")] = "close_all_nodes",
+          [k("Z")] = "expand_all_nodes",
+          [k("<space>")] = "noop", -- space is our leader we want to keep it free
           [k("l")] = "noop",
-          [k("e")] = "open_split", -- e is down in nuei navigation
-          [k("i")] = "open_vsplit", -- i is right in nuei navigation
+          -- [k("e")] = "open_split", -- e is down in nuei navigation
+          -- [k("i")] = "open_vsplit", -- i is right in nuei navigation
+          [k("e")] = "split_with_window_picker", -- e = down [neui navigation]
+          [k("i")] = "vsplit_with_window_picker", -- i = left [neui navigation]
+          [k("<cr>")] = "open_with_window_picker",
+
           -- [k('<C-f>')] = "noop", -- { "scroll_preview", config = { direction = -10 } },
           -- [k('<C-b>')] = "noop", -- { "scroll_preview", config = { direction = 10 } },
           -- [k('<LeftRelease>')] = "noop", -- "open",
           -- [k('l')] = "focus_preview",
           -- [k('S')] = "open_split",
-          -- [k('S')] = "split_with_window_picker",
           -- [k('s')] = "open_vsplit",
           -- [k('sr')] = "open_rightbelow_vs",
           -- [k('sl')] = "open_leftabove_vs",
-          -- [k('s')] = "vsplit_with_window_picker",
           -- [k('t')] = "noop", -- "open_tabnew",
           -- [k('<cr>')] = "open_drop",
           -- [k('t')] = "open_tab_drop",
-          -- [k('w')] = "open_with_window_picker",
           -- [k('C')] = "noop", -- "close_node",
           -- [k('z')] = "noop", -- "close_all_nodes",
           --[k('Z')] = "expand_all_nodes",
@@ -272,36 +268,42 @@ return {
     },
     keys = function()
       return {
-        { flash('f').key, mode = flash('f').mode },
-        { flash('F').key, mode = flash('F').mode },
-        { flash('t').key, mode = flash('t').mode },
-        { flash('T').key, mode = flash('T').mode },
-        { flash(',').key, mode = flash(',').mode },
-        { flash(';').key, mode = flash(';').mode },
         {
-          flash('jump').key,
-          mode = flash('jump').mode,
+          "<Plug>flash.jump",
+          mode = {'n', 'x', 'o'},
           function()
             require("flash").jump()
           end,
           desc = "Flash",
         },
         {
-          flash('tss').key,
-          mode = flash('tss').mode,
+          "<Plug>flash.tss",
+          mode = {'n', 'x', 'o'},
           function()
             require("flash").treesitter_search()
           end,
           desc = "Treesitter Search",
         },
         {
-          flash('ts').key,
-          mode = flash('ts').mode,
+          "<Plug>flash.ts",
+          mode = {'n', 'x', 'o'},
           function()
             require("flash").treesitter()
           end,
           desc = "Flash Treesitter",
         },
+        {
+          "<Plug>flash.line",
+          mode = {'n', 'x', 'o'},
+          function()
+            require("flash").jump({
+              search = { mode = "search", max_length = 0 },
+              label = { after = { 0, 0 } },
+              pattern = "^"
+            })
+          end,
+          desc = "Flash jump to line",
+        }
       }
     end,
     opts = {
@@ -310,15 +312,16 @@ return {
         char = {
           enabled = true,
           keys = {
-            ["f"] = flash('f').key,
-            ["F"] = flash('F').key,
-            ["t"] = flash('t').key,
-            ["T"] = flash('T').key,
-            [";"] = flash(';').key,
-            [","] = flash(',').key,
+            ["f"] = "<Plug>flash.f",
+            ["F"] = "<Plug>flash.F",
+            ["t"] = "<Plug>flash.t",
+            ["T"] = "<Plug>flash.T",
+            [";"] = "<Plug>flash.;",
+            [","] = "<Plug>flash.,",
           },
           label = { exclude = "hjkliardc" },
         },
+        treesitter_search = { label = { rainbow = { enabled = false, shade = 2 } } },
       },
     },
   },
