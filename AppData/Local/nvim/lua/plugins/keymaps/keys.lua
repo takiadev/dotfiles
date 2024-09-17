@@ -89,13 +89,20 @@ return {
           [k("<esc>")] = "cancel", -- close preview or floating neo-tree window
           [k("q")] = "close_window",
           [k("w")] = "prev_source",
-          [k("f")] = "noop",
+          [k("f")] = "move_cursor_up",
           [k("p")] = "next_source",
           [k("a")] = { "add", config = { show_path = "relative" } },
+          
+          -- TODO: add this: -- https://github.com/nvim-neo-tree/neo-tree.nvim/wiki/Tips#navigation-with-hjkl
           [k("r")] = "close_node",
-          -- [k('R')] = "navigate_up",
-          [k("s")] = "noop",
+          [k('R')] = "navigate_up",
           [k("t")] = "open",
+          ["<right>"] = "open",
+          ["<left>"] = "close_node",
+          
+          ["f"] = "nop", -- set via autocmd
+          ["s"] = "nop", -- set via autocmd
+
           [k("T")] = { "open_tabnew", config = { expand_nested_files = false } },
           [k("d")] = "delete",
           -- [k('h')] = "toggle_hidden",
@@ -151,16 +158,16 @@ return {
             [k("R")] = "navigate_up",
             [k("h")] = "toggle_hidden",
             [k(".")] = "set_root",
+            [k("s")] = "nop", -- see autocmd
+            [k("f")] = "nop", -- see autocmd
           },
           other = {
             [k("H")] = "noop", -- "toggle_hidden",
             [k("<bs>")] = "noop", -- "navigate_up",
             [k(".")] = "noop", -- "set_root",
 
-            [k("r")] = "noop", -- "noop", -- left
-            [k("s")] = "noop", -- "noop", -- down
-            [k("f")] = "noop", -- "noop", -- up
-            [k("t")] = "open", -- "focus_preview", -- right
+            -- [k("r")] = "noop", -- "noop", -- left
+            -- [k("t")] = "open", -- "focus_preview", -- right
             [k("/")] = "noop", -- "fuzzy_finder",
             [k("D")] = "noop", -- "fuzzy_finder_directory",
             --[k('/')] = "noop", -- "filter_as_you_type", -- this was the default until v1.28
@@ -258,10 +265,10 @@ return {
   },
   {
     "folke/flash.nvim", -- https://www.lazyvim.org/plugins/editor#flashnvim
-    labels = "arstneioufcmx,yw",
+    labels = "baqwrfsptcxlnueyi;om,",
     label = {
       rainbow = {
-        enabled = true,
+        enabled = false,
         -- number between 1 and 9
         shade = 5,
       },
@@ -297,6 +304,7 @@ return {
           mode = {'n', 'x', 'o'},
           function()
             require("flash").jump({
+              labels="baqwrfsptcxlnueyi;om,",
               search = { mode = "search", max_length = 0 },
               label = { after = { 0, 0 } },
               pattern = "^"
@@ -308,9 +316,11 @@ return {
     end,
     opts = {
       modes = {
-        search = { enabled = false },
+        search = { enabled = true },
         char = {
           enabled = true,
+          jump_labels = false,
+          highlight = { backdrop = false },
           keys = {
             ["f"] = "<Plug>flash.f",
             ["F"] = "<Plug>flash.F",
@@ -319,7 +329,19 @@ return {
             [";"] = "<Plug>flash.;",
             [","] = "<Plug>flash.,",
           },
-          label = { exclude = "hjkliardc" },
+          -- label = { exclude = "hjkliardc" },
+          char_actions = function(motion)
+            return {
+              [";"] = "next", -- set to `right` to always go right
+              [","] = "prev", -- set to `left` to always go left
+              -- clever-f style
+              -- [motion:lower()] = "next",
+              -- [motion:upper()] = "prev",
+              -- jump2d style: same case goes next, opposite case goes prev
+              [motion] = "next",
+              [motion:match("%l") and motion:upper() or motion:lower()] = "prev",
+            }
+          end,
         },
         treesitter_search = { label = { rainbow = { enabled = false, shade = 2 } } },
       },

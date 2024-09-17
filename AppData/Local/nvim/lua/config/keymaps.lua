@@ -15,6 +15,7 @@ local resize = require('lib.resize_window')
 vim.api.nvim_set_keymap('i', '<Space>', '<C-g>u<Space>', { noremap = true, silent = true })
 
 -- Bindings for growing and shrinking window edges
+-- TODO
 local Window = require('lib.resize_window')
 vim.keymap.set('n', '<C-Right>', Window.shrink_left_edge, { noremap = true, silent = true })  -- Shrink left
 vim.keymap.set('n', '<C-Left>', Window.grow_left_edge, { noremap = true, silent = true })       -- Grow left
@@ -24,6 +25,12 @@ vim.keymap.set('n', '<C-Down>', Window.shrink_top_edge, { noremap = true, silent
 vim.keymap.set('n', '<C-Up>', Window.grow_top_edge, { noremap = true, silent = true })          -- Grow top
 vim.keymap.set('n', '<C-S-Up>', Window.shrink_bottom_edge, { noremap = true, silent = true })   -- Shrink bottom
 vim.keymap.set('n', '<C-S-Down>', Window.grow_bottom_edge, { noremap = true, silent = true })     -- Grow bottom
+
+-- line textobject
+-- TODO
+vim.keymap.set({'x', 'o'}, 'al', ':<c-u>normal! $v0<cr>', {noremap=true, silent=true, desc="Line"})
+vim.keymap.set({'x', 'o'}, 'il', ':<c-u>normal! $v^<cr>', {noremap=true, silent=true, desc="Line"})
+vim.keymap.set({'x', 'o'}, 'a' , ':<c-u>normal! V<cr>',   {noremap=true, silent=true, desc="Line"})
 
 -- local Custom = require('lib.custom')
 -- vim.keymap.set({'n', 'i', 'o', 'x', 't', 'c'}, '<M-r>', Custom.focus_window_left_or_open_neotree, {noremap=true, silent=true})

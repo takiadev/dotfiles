@@ -64,6 +64,7 @@ return {
   },
   do_redo = {
     n = { src = "W", plugin = "keymap", dst = "<C-r>", opts = { desc = "do_redo" } },
+    i = { src = "W", plugin = "keymap", dst = "<C-o><C-r>", opts = { noremap=true, desc = "do_redo" } },
   },
   do_repeat_last_cmd = {
     nx = { src = ";", plugin = "keymap", dst = ".", opts = { desc = "do_repeat_last_cmd" } },
@@ -119,7 +120,7 @@ return {
   },
   do_undo = {
     nvx = { src = "<C-z>", plugin = "keymap", dst = "u", opts = { noremap = true, desc = "Undo" } },
-    i = { src = "<C-z>", plugin = "keymap", dst = "<Esc>u", opts = { noremap = true, desc = "Undo" } },
+    i = { src = "<C-z>", plugin = "keymap", dst = "<C-o>u", opts = { noremap = true, desc = "Undo" } },
     t = { src = "<C-z>", plugin = "keymap", dst = "<C-\\><C-n>u", opts = { noremap = true, desc = "Undo" } },
   },
   do_z_prefix = {
@@ -192,20 +193,22 @@ mo_prev_match = {
   mo_find_char = {
     nox = {plugin="keymap", dst="<Plug>flash.f", opts = {desc = "mo_find_char", remap=true,}},
   },
+  mo_rfind_char = {
+    nox = {plugin="keymap", dst="<Plug>flash.F", opts = { remap=true, desc = "mo_rfind_char" } },
+  },
   mo_till_char = {
     nox = {plugin="keymap", dst="<Plug>flash.t", opts = {desc = "mo_till_char", remap=true,}},
-  },  
+    -- nox = {plugin="keymap", dst="t", opts = {desc = "mo_till_char", noremap=true,}},
+  },
+  mo_rtill_char = {
+    nox = {plugin="keymap", dst="<Plug>flash.T", opts = { remap=true, desc = "mo_rtill_char"}},
+    -- nox = {plugin="keymap", dst="T", opts = { noremap=true, desc = "mo_rtill_char"}},
+  },
   mo_repeat_find = {
     nox = {plugin="keymap", dst="<Plug>flash.;", opts = {desc = "mo_repeat_find", remap=true,}},
   },
   mo_repeat_rfind = {
     nox = {plugin="keymap", dst="<Plug>flash.,", opts = { remap=true, desc = "mo_repeat_rfind" } },
-  },
-  mo_rfind_char = {
-    nox = {plugin="keymap", dst="<Plug>flash.F", opts = { remap=true, desc = "mo_rfind_char" } },
-  },
-  mo_rtill_char = {
-    nox = {plugin="keymap", dst="<Plug>flash.T", opts = { remap=true, desc = "mo_rtill_char"}},
   },
   mo_screen_bottom = {
     nox = { src = "T", plugin = "keymap", dst = "L", opts = { desc = "mo_screen_bottom" } },
@@ -253,7 +256,7 @@ mo_prev_match = {
     x = { src = "s", plugin = "keymap", dst = "s", opts = { desc = "op_surround" } },
   },
   prefix_motion_menu = {
-    nox = { src="s", plugin="which-key", dst="", opts={noremap=true, desc="Prefix for motion menu"} },
+    nox = { src="s", plugin="keymap", dst="<nop>", opts={noremap=true, desc="Prefix for motion menu"} },
   },
   sys_next_buffer = {
     vx = {

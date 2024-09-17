@@ -8,13 +8,13 @@ return {
             function() require("which-key").show({ global = true }) end,
             desc = "Keymaps (which-key)",
         },
+        -- {
+        --    "sc",
+        --    function() require("which-key").show({ keys = "s", loop = true }) end,
+        --    desc = "Motion Menu Hydra Mode",
+        -- },
         {
-            "sc",
-            function() require("which-key").show({ keys = "s", loop = true }) end,
-            desc = "Motion Menu Hydra Mode",
-        },
-        {
-            "s",
+            "<leader>S",
             function() require("which-key").show({ keys = "s", loop = false}) end,
             desc = "Motion Menu",
         },

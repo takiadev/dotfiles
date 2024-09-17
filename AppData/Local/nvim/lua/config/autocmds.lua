@@ -5,6 +5,7 @@
 -- SYNCHRONIZE COLORSCHEME WITH WEZTERM
 -- https://www.reddit.com/r/neovim/comments/19bb3e1/consistent_neovimwezterm_colorscheme/
 
+-- Auto Open Neotree on start
 -- vim.api.nvim_create_augroup("neotree_autoopen", { clear = true })
 -- vim.api.nvim_create_autocmd("BufWinEnter", {
 -- desc = "Open neo-tree on enter",
@@ -17,6 +18,7 @@
 -- end,
 -- })
 
+-- Remap z key with nowait modifier
 --[[
 vim.api.nvim_create_autocmd({"BufEnter", "BufWinEnter"}, {
     pattern = "*",
@@ -26,3 +28,12 @@ vim.api.nvim_create_autocmd({"BufEnter", "BufWinEnter"}, {
   })
 --]]
 
+-- Enable f/s navigation in neo-tree
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = "neo-tree",
+  callback = function()
+    -- Map 's' to <Down> in the current buffer
+    vim.api.nvim_buf_set_keymap(0, 'n', 'f', '<Up>', { noremap = true, silent = true, nowait = true, })
+    vim.api.nvim_buf_set_keymap(0, 'n', 's', '<Down>', { noremap = true, silent = true, nowait = true, })
+  end,
+})
