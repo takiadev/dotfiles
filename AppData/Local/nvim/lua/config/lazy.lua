@@ -20,10 +20,12 @@ require("lazy").setup({
     -- add LazyVim and import its plugins
     { "LazyVim/LazyVim", import = "lazyvim.plugins" },
     { import = "lazyvim.plugins.extras.coding.codeium" }, -- LazyExtra codeium
-    
+    { import = "lazyvim.plugins.extras.test.core" },
+    { import = "lazyvim.plugins.extras.lang.go" },
+    { import = "lazyvim.plugins.extras.dap.core" },
     -- import/override with your plugins
     { import = "plugins" },  
-    { import = "plugins.keymaps" },
+    { import = "plugins.lang" },
   },
   defaults = {
     keymaps = false, -- do not load lazy's default mappings

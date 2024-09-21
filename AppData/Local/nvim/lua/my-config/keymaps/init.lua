@@ -1,8 +1,8 @@
 local M = {}
 
-local utils = require("my-config.keys.utils")
-local keys = require("my-config.keys.keys")
-local actions = require("my-config.keys.actions")
+local utils = require("my-config.keymaps.utils")
+local keys = require("my-config.keymaps.keys")
+local actions = require("my-config.keymaps.actions")
 
 M._plugins = utils.make_plugins_to_keys_array(keys, actions)
 
@@ -38,7 +38,7 @@ function M.get_key(plugin, dst)
   end
 end
 
-function M.for_each_mapping(f)
+function M.for_each_mapping(f, missing_modes)
   local dsts = M.get_plugin_data("keymap")
 
   local allowed_modes = "cinotvx"
@@ -46,8 +46,10 @@ function M.for_each_mapping(f)
   if dsts then
     for dst, keys in pairs(dsts) do
       for key, modes in pairs(keys) do
+        local seen_modes = {}
         for mode, opts in pairs(modes) do
           if allowed_modes:find(mode) then -- Check if mode is allowed
+            seen_modes[mode] = true
             if opts.noremap == nil and opts.remap == nil then
               opts.noremap = true
             end
@@ -65,6 +67,7 @@ end
 
 function M.setup_keymaps()
   M.for_each_mapping(vim.keymap.set)
+  
 end
 
 return M

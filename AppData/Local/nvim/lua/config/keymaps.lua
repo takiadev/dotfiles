@@ -3,10 +3,7 @@
 -- Add any additional keymaps here
 ------------------------------------------------------
 
--- local keymaps = require("my-config.keymaps")
--- keymaps.register_mappings()
-
-local keymaps = require("my-config.keys")
+local keymaps = require("my-config.keymaps")
 keymaps.setup_keymaps()
 
 local resize = require('lib.resize_window')
@@ -28,12 +25,14 @@ vim.keymap.set('n', '<C-S-Down>', Window.grow_bottom_edge, { noremap = true, sil
 
 -- line textobject
 -- TODO
-vim.keymap.set({'x', 'o'}, 'al', ':<c-u>normal! $v0<cr>', {noremap=true, silent=true, desc="Line"})
-vim.keymap.set({'x', 'o'}, 'il', ':<c-u>normal! $v^<cr>', {noremap=true, silent=true, desc="Line"})
-vim.keymap.set({'x', 'o'}, 'a' , ':<c-u>normal! V<cr>',   {noremap=true, silent=true, desc="Line"})
+local TO = require('my-config.textobjects')
+TO.set()
 
--- local Custom = require('lib.custom')
--- vim.keymap.set({'n', 'i', 'o', 'x', 't', 'c'}, '<M-r>', Custom.focus_window_left_or_open_neotree, {noremap=true, silent=true})
+local Custom = require('lib.custom')
+vim.keymap.set({'n', 'i', 'o', 'x', 't', 'c'}, '<M-left>', Custom.focus_window_left_or_open_neotree, {noremap=true, silent=true})
+
+-- vim.keymap.set({ 'o' }, 'iq', textobject_rhs, { desc = 'Comment textobject' })
+-- vim.keymap.set({ 'o' }, 'yq', textobject_rhs, { desc = 'Comment textobject' })
 
 -- vim.keymap.set('n', 'l', open_node, { noremap = true, silent = true })
 

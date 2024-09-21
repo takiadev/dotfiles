@@ -13,8 +13,10 @@ return {
     "hrsh7th/nvim-cmp",
     opts = {
         mapping = cmp.mapping.preset.insert({
-            -- ['<M-n>'] = cmp.mapping.abort(),
-            ['<right>'] = LazyVim.cmp.confirm({ select = auto_select }),
+            ['<M-n>'] = cmp.mapping.abort(),
+            ['<M-i>'] = LazyVim.cmp.confirm({ select = auto_select }),
+            ['<M-u>'] = cmp.mapping(cmp.mapping.select_prev_item(), { 'i', 'c' }),
+            ['<M-e>'] = cmp.mapping(cmp.mapping.select_next_item(), { 'i', 'c' }),
             -- ['<C-b>'] = cmp.mapping.scroll_docs(-4),
             -- ['<C-f>'] = cmp.mapping.scroll_docs(4),
             -- ['<C-Space>'] = cmp.mapping.complete(),

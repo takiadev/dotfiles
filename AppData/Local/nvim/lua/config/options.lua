@@ -5,3 +5,5 @@
 -- langmap = require('config.langmap')
 -- vim.opt.langmap = langmap.cm .. ";" .. langmap.en
 vim.opt.relativenumber = false
+
+vim.opt.clipboard = ""

@@ -10,7 +10,7 @@ return {
     n = { src = "N", plugin = "keymap", dst = "C", opts = { desc = "do_change_eol" } },
   },
   do_comment_line = {
-    n = { plugin = "keymap", dst = "gcc", opts = { desc = "do_comment_line", remap = true }, },
+    nx = { plugin = "keymap", dst = "gcc", opts = { desc = "do_comment_line", remap = true }, },
     i = { plugin = "keymap", dst = '<cmd>normal gcc<CR>', opts = { remap = true, silent = true },} 
   },
   do_copy_eol = {
@@ -36,7 +36,7 @@ return {
   },
   do_newline_insert = {
     nx = { src = "o", plugin = "keymap", dst = "o", opts = { noremap = true, silent = true, desc = "Insert newline and enter insert mode" } },
-    i = { src = "<M-o>", plugin = "keymap", dst = "<Cmd>normal! o<CR>", opts = { noremap = true, silent = true, desc = "Insert newline in insert mode" } },
+    i = { src = "<M-o>", plugin = "keymap", dst = "<C-o>o", opts = { noremap = true, silent = true, desc = "Insert newline in insert mode" } },
   },
   do_newline_insert_before = {
       nx = { src = "O", plugin = "keymap", dst = "O", opts = { noremap = true, silent = true, desc = "Insert newline before and enter insert mode" } },
@@ -88,7 +88,7 @@ return {
     i = {
       src = "<C-s>",
       plugin = "keymap",
-      dst = "<Esc>:w<CR>a",
+      dst = "<Esc>:w<CR>",
       opts = { noremap = true, desc = "Save File", silent = true },
     },
     o = {
@@ -160,7 +160,7 @@ mo_next_change_list = {
     nox = { src="s>", plugin="keymap", dst="g,", opts={noremap=true, desc="Go to next change list"} },
 },
 mo_matching_pair = {
-    nox = { src="p", plugin="keymap", dst="%", opts={noremap=true, desc="Jump to matching pair"} },
+    nox = { src="p", plugin="keymap", dst="%", opts={remap=true, desc="Jump to matching pair"} },
 },
 mo_bol = {
     nox = { src="sa", plugin="keymap", dst="0", opts={noremap=true, desc="Move to beginning of line"} },
@@ -219,6 +219,9 @@ mo_prev_match = {
   mo_find_pair = {
     nox = { src = "u", plugin = "keymap", dst = "<Plug>flash.jump", opts = { remap=true, desc = "mo_find_pair" } },
   },
+  mo_till_pair = {
+    nox = { src = "", plugin = "keymap", dst = "<Plug>flash.jump_till", opts = {remap=true, desc = "mo_till_pair" } },
+  },
   mo_rfind_pair = {
     nox = { src = "U", plugin = "keymap", dst = "F", opts = { noremap = true, desc = "mo_rfind_pair" } },
   },
@@ -226,37 +229,57 @@ mo_prev_match = {
     nox = { src = "U", plugin = "keymap", dst = "<Plug>flash.ts", opts = { remap=true, desc = "mo_ts_find" } },
   },
     mo_up = {
-      nox = { src = "f", plugin = "keymap", dst = "v:count == 0 ? 'gk' : 'k'", opts = { silent = true, expr = true, desc = "Move cursor ↑" }, },
+      noxv = { src = "f", plugin = "keymap", dst = "v:count == 0 ? 'gk' : 'k'", opts = { silent = true, expr = true, desc = "Move cursor ↑" }, },
       i = { src = "", plugin = "keymap", dst = "<Up>", opts = { silent = true, expr = false, desc = "Move cursor ↑" }, },
       t = { src = "", plugin = "keymap", dst = "<C-\\><C-N><C-w>k", opts = { silent = true, expr = false, desc = "Move cursor ↑ in terminal mode" }, },
     },
     mo_down = {
-      nox = { src = "s", plugin = "keymap", dst = "v:count == 0 ? 'gj' : 'j'", opts = { silent = true, expr = true, desc = "Move cursor ↓" }, },
+      noxv = { src = "s", plugin = "keymap", dst = "v:count == 0 ? 'gj' : 'j'", opts = { silent = true, expr = true, desc = "Move cursor ↓" }, },
       i = { src = "", plugin = "keymap", dst = "<Down>", opts = { silent = true, expr = false, desc = "Move cursor ↓" }, },
       t = { src = "", plugin = "keymap", dst = "<C-\\><C-N><C-w>j", opts = { silent = true, expr = false, desc = "Move cursor ↓ in terminal mode" }, },
     },
     mo_left = {
-      nox = { src = "a", plugin = "keymap", dst = "h", opts = { silent = true, desc = "Move cursor ←" }, },
+      noxv = { src = "a", plugin = "keymap", dst = "h", opts = { silent = true, desc = "Move cursor ←" }, },
       i = { src = "", plugin = "keymap", dst = "<Left>", opts = { silent = true, expr = false, desc = "Move cursor ←" }, },
       t = { src = "", plugin = "keymap", dst = "<C-\\><C-N><C-w>h", opts = { silent = true, expr = false, desc = "Move cursor ← in terminal mode" }, },
     },
     mo_right = {
-      nox = { src = "d", plugin = "keymap", dst = "l", opts = { silent = true, desc = "Move cursor →" }, },
+      noxv = { src = "d", plugin = "keymap", dst = "l", opts = { silent = true, desc = "Move cursor →" }, },
       i = { src = "", plugin = "keymap", dst = "<Right>", opts = { silent = true, expr = false, desc = "Move cursor →" }, },
       t = { src = "", plugin = "keymap", dst = "<C-\\><C-N><C-w>l", opts = { silent = true, expr = false, desc = "Move cursor → in terminal mode" }, },
     },
-
   op_around = {
-    x = { src = "y", plugin = "keymap", dst = "a", opts = { desc = "op_around" } },
+    noixvct = { src = "y", plugin = "mini.ai", dst = "", opts = { desc = "op_around" } },
   },
   op_inner = {
-    x = { src = "i", plugin = "keymap", dst = "i", opts = { desc = "op_inner" } },
+    noixvct = { src = "i", plugin = "mini.ai", dst = "i", opts = { desc = "op_inner" } },
   },
   op_surround = {
-    x = { src = "s", plugin = "keymap", dst = "s", opts = { desc = "op_surround" } },
+    noixvct = { src = "s", plugin = "keymap", dst = "s", opts = { desc = "op_surround" } },
   },
   prefix_motion_menu = {
     nox = { src="s", plugin="keymap", dst="<nop>", opts={noremap=true, desc="Prefix for motion menu"} },
+  },
+  prefix_mini_surround = {
+    noxitvc = { plugin="mini-surround", dst="prefix"},
+  },
+  mini_surround_add = {
+    nox = { src = "ca", plugin = "keymap", dst = "<plug>(mini-surround-add)", opts = { desc = "Mini Surround Add" } },
+  },
+  mini_surround_replace = {
+    nox = { src = "cr", plugin = "keymap", dst = "<plug>(mini-surround-replace)", opts = { desc = "Mini Surround Replace" } },
+  },
+  mini_surround_delete = {
+    nox = { src = "cx", plugin = "keymap", dst = "<plug>(mini-surround-delete)", opts = { desc = "Mini Surround Delete" } },
+  },
+  mini_surround_next = {
+    nox = { src = "cn", plugin = "keymap", dst = "<plug>(mini-surround-find-right)", opts = { desc = "Mini Surround Next" } },
+  },
+  mini_surround_last = {
+    nox = { src = "cl", plugin = "keymap", dst = "<plug>(mini-surround-find-left)", opts = { desc = "Mini Surround Last" } },
+  },
+  mini_surround_highlight = {
+    nox = { src = "ch", plugin = "keymap", dst = "<plug>(mini-surround-highlight)", opts = { desc = "Mini Surround Highlight" } },
   },
   sys_next_buffer = {
     vx = {
@@ -382,12 +405,17 @@ mo_prev_match = {
     nx = { src = "n", plugin = "keymap", dst = "c", opts = { desc = "verb_change" } },
   },
   verb_comment = {
-    n = {
+    nx = {
       src = "q",
       plugin = "keymap",
       dst = "gc",
       opts = { noremap = false, desc = "verb_comment", remap = true },
     },
+  },
+  object_comment = {
+    o = {
+      plugin="keymap", dst="gc", opts={noremap=false, desc="comment object", remap=true}
+    }
   },
   verb_copy = {
     nvx = { src = "<C-c>", plugin = "keymap", dst = '"+y', opts = { noremap = true, desc = "Copy" } },

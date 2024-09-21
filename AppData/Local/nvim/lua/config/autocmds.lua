@@ -37,3 +37,19 @@ vim.api.nvim_create_autocmd("FileType", {
     vim.api.nvim_buf_set_keymap(0, 'n', 's', '<Down>', { noremap = true, silent = true, nowait = true, })
   end,
 })
+ 
+--[[
+-- Autocommand to hide inlay hints on entering Insert mode
+vim.api.nvim_create_autocmd("InsertEnter", {
+  callback = function()
+    vim.lsp.inlay_hint.enable(false, { bufnr = 0 })
+  end,
+})
+
+-- Autocommand to show inlay hints on leaving Insert mode
+vim.api.nvim_create_autocmd("InsertLeave", {
+  callback = function()
+    vim.lsp.inlay_hint.enable(true, { bufnr = 0 })
+  end,
+})
+--]]
