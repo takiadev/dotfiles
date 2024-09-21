@@ -41,11 +41,11 @@ return {
             inside = to.inside,
         
             -- Next/last variants
-            around_next = to.around .. to.next,
-            inside_next = to.inside .. to.next,
-            around_last = to.around .. to.last,
-            inside_last = to.inside .. to.last,
-        
+            around_next = to.around_next,
+            inside_next = to.inside_next,
+            around_last = to.around_prev,
+            inside_last = to.inside_prev,
+
             -- Move cursor to corresponding edge of `a` textobject
             -- Note: treesitter:move should take precedence here
             goto_left = "", -- to.go_to .. to.next,

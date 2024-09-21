@@ -192,7 +192,7 @@ function M.register_descriptions(opts)
 
   keymaps.for_each_mapping(function(modes, lhs, rhs, opts)
     -- print(vim.inspect({key=lhs, opts=opts}))
-    wk.add({lhs, mode=modes, desc= (opts.desc or "")})
+    wk.add({ lhs, mode = modes, desc = (opts.desc or "") })
   end)
 
   opts = opts or {}
@@ -220,55 +220,54 @@ function M.register_descriptions(opts)
   end
 end
 
-
 ----------------------------------------------------------------------
 
 return {
-{
+  {
     "folke/which-key.nvim",
     init = function()
-        M.register_descriptions()
+      M.register_descriptions()
     end,
     keys = {
-        {
-            "<leader>?",
-            function() require("which-key").show({ global = true }) end,
-            desc = "Keymaps (which-key)",
-        },
-        {
-            "<leader>S",
-            function() require("which-key").show({ keys = "s", loop = false}) end,
-            desc = "Motion Menu",
-        },
+      {
+        "<leader>?",
+        function()
+          require("which-key").show({ global = true })
+        end,
+        desc = "Keymaps (which-key)",
+      },
     },
     opts = {
-        spec = {
-            { 
-                mode = {'n', 'x', 'o'},
-                {'s', group = 'Motion Menu' },
-            },
+      triggers = {
+        { "<leader>", mode = "nixsotc" },
+      },
+      spec = {
+        {
+          mode = { "n", "x", "o" },
+          { "s", group = "Motion Menu" },
         },
-        sort = { "local", "order", "alphanum", "mod" },
-        filter = function(mapping)
-            return mapping.desc and mapping.desc ~= "" and mapping.desc ~= "<unset>"
-        end,
+      },
+      sort = { "local", "order", "alphanum", "mod" },
+      filter = function(mapping)
+        return mapping.desc and mapping.desc ~= "" and mapping.desc ~= "<unset>"
+      end,
     },
     plugins = {
-        marks = true, -- shows a list of your marks on ' and `
-        registers = true, -- shows your registers on " in NORMAL or <C-r> in INSERT mode
-        spelling = {
-            enabled = true, -- enabling this will show WhichKey when pressing z= to select spelling suggestions
-            suggestions = 20, -- how many suggestions should be shown in the list?
-        },
-        presets = {
-            operators = false, -- adds help for operators like d, y, ...
-            motions = false, -- adds help for motions
-            text_objects = false, -- help for text objects triggered after entering an operator
-            windows = true, -- default bindings on <c-w>
-            nav = true, -- misc bindings to work with windows
-            z = true, -- bindings for folds, spelling and others prefixed with z
-            g = true, -- bindings for prefixed with g
-        },
+      marks = true, -- shows a list of your marks on ' and `
+      registers = true, -- shows your registers on " in NORMAL or <C-r> in INSERT mode
+      spelling = {
+        enabled = true, -- enabling this will show WhichKey when pressing z= to select spelling suggestions
+        suggestions = 20, -- how many suggestions should be shown in the list?
+      },
+      presets = {
+        operators = false, -- adds help for operators like d, y, ...
+        motions = false, -- adds help for motions
+        text_objects = false, -- help for text objects triggered after entering an operator
+        windows = true, -- default bindings on <c-w>
+        nav = true, -- misc bindings to work with windows
+        z = true, -- bindings for folds, spelling and others prefixed with z
+        g = true, -- bindings for prefixed with g
+      },
     },
     --[[
     opts = function (_, opts)
@@ -286,7 +285,7 @@ return {
         return opts
     end,
     --]]
-}
+  },
 }
 
 --[[        
@@ -346,3 +345,4 @@ return {
             },
         }
 --]]
+
